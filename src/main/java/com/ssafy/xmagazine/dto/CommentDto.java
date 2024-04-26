@@ -1,4 +1,4 @@
-package com.ssafy.dto;
+package com.ssafy.xmagazine.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,12 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContentDto {
+public class CommentDto {
     private int id;
-    private int pageId;
     private int magazineId;
-    private String contentType;
+    private int userId;
     private String content;
-    private String imgUrl;
     private String createdAt;
 }

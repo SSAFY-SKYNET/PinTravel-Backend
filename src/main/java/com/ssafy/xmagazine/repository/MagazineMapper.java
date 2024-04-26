@@ -1,4 +1,6 @@
-package com.ssafy.repository;
+package com.ssafy.xmagazine.repository;
+
+
 
 import org.apache.ibatis.annotations.Mapper;
 

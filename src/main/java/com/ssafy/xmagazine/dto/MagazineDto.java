@@ -1,4 +1,4 @@
-package com.ssafy.dto;
+package com.ssafy.xmagazine.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class MagazineDto {
     private int id;
-    private String username;
-    private String email;
-    private String password;
+    private int userId;
+    private String title;
+    private String description;
     private String createdAt;
 }
