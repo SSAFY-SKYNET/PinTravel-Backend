@@ -51,8 +51,9 @@ public class UserControllerTest {
     @Test
     public void testSelectAllUser() throws Exception {
         // given
-//        List<UserDto> users = Arrays.asList(new UserDto(1, "User1"), new UserDto(2, "User2"));
-//        given(userService.selectAllUser()).willReturn(users);
+        List<UserDto> users = Arrays.asList(new UserDto(1, "User1", "user1@example.com", "password1", "2021-01-01"),
+                new UserDto(2, "User2", "user2@example.com", "password2", "2021-01-02"));
+        given(userService.selectAllUser()).willReturn(users);
 
         // when
         mockMvc.perform(get("/user/"))
@@ -61,9 +62,11 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].name", is("User1")))
+                .andExpect(jsonPath("$[0].username", is("User1")))
+                .andExpect(jsonPath("$[0].email", is("user1@example.com")))
                 .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].name", is("User2")));
+                .andExpect(jsonPath("$[1].username", is("User2")))
+                .andExpect(jsonPath("$[1].email", is("user2@example.com")));
     }
 
     @Test
