@@ -17,20 +17,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(int userId) {
-        // TODO Auto-generated method stub
-
+        userMapper.deleteUser(userId);
     }
 
     @Override
-    public List<UserDto> getAllUser() {
-        // TODO Auto-generated method stub
-        return null;
+    public List<UserDto> selectAllUser() {
+        return userMapper.selectAllUser();
     }
 
     @Override
     public void insertUser(UserDto userDto) {
-        // TODO Auto-generated method stub
-
+        userMapper.insertUser(userDto);
     }
 
     @Override
@@ -40,8 +37,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UserDto userDto) {
-        // TODO Auto-generated method stub
+        userMapper.updateUser(userDto);
+    }
 
+    @Override
+    public void login(UserDto userDto) {
+        userMapper.login(userDto);
+    }
+
+    @Override
+    public void logout(UserDto userDto) {
+        userMapper.logout(userDto);
     }
 
 }
