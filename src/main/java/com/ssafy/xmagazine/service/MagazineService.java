@@ -5,11 +5,11 @@ import java.util.List;
 import com.ssafy.xmagazine.dto.MagazineDto;
 
 public interface MagazineService {
-	List<MagazineDto> getMagazineList();
+	List<MagazineDto> selectMagazine();
 
-	MagazineDto getMagazine(int id);
+	MagazineDto selectMagazineById(int id);
 
-	void createMagazine(MagazineDto magazineDto);
+	void insertMagazine(MagazineDto magazineDto);
 
 	void updateMagazine(MagazineDto magazineDto);
 
