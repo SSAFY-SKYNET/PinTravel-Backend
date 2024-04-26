@@ -1,4 +1,4 @@
-package com.ssafy.dto;
+package com.ssafy.xmagazine.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,12 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocationDto {
+public class PageDto {
     private int id;
     private int magazineId;
-    private String name;
-    private String address;
-    private double latitude;
-    private double longitude;
+    private int pageNumber;
     private String createdAt;
 }

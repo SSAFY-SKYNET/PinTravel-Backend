@@ -1,4 +1,4 @@
-package com.ssafy.config;
+package com.ssafy.xmagazine.config;
 
 import javax.sql.DataSource;
 
@@ -12,7 +12,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration // 스프링 설정 클래스를 나타내는 어노테이션
-@MapperScan(basePackages = "com.ssafy.repository.**") // MyBatis 매퍼 인터페이스를 스캔할 패키지 경로 설정
+@MapperScan(basePackages = "com.ssafy.xmagazine.repository")
 public class MybatisConfig {
     @Bean // 스프링 빈으로 등록하기 위한 어노테이션
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {

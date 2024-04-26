@@ -1,8 +1,8 @@
-package com.ssafy.service;
+package com.ssafy.xmagazine.service;
 
 import java.util.List;
 
-import com.ssafy.dto.UserDto;
+import com.ssafy.xmagazine.dto.UserDto;
 
 public interface UserService {
 
@@ -13,7 +13,8 @@ public interface UserService {
 
     public void deleteUser(int userId);
 
-    public UserDto getUser(int userId);
-
     public List<UserDto> getAllUser();
+
+    public UserDto selectUserById(int userId);
+
 }

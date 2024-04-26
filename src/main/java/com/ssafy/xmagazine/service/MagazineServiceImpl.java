@@ -1,13 +1,13 @@
-package com.ssafy.service;
+package com.ssafy.xmagazine.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.ssafy.dto.MagazineDto;
+import com.ssafy.xmagazine.dto.MagazineDto;
 
 @Service
-public class MagazineServiceImpl implements MagazineService{
+public class MagazineServiceImpl implements MagazineService {
 	@Override
 	public List<MagazineDto> getMagazineList() {
 		return List.of();

@@ -1,4 +1,4 @@
-package com.ssafy.config;
+package com.ssafy.xmagazine.config;
 
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
