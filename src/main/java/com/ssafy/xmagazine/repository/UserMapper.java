@@ -1,5 +1,7 @@
 package com.ssafy.xmagazine.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -21,4 +23,13 @@ public interface UserMapper {
 
     @Delete("DELETE FROM user WHERE id = #{id}")
     void deleteUser(int id);
+
+    @Select("SELECT * FROM user")
+    List<UserDto> selectAllUser();
+
+    @Select("SELECT * FROM user WHERE email = #{email} AND password = #{password}")
+    UserDto login(UserDto user);
+
+    @Update("UPDATE user SET loggedIn = false WHERE id = #{id}")
+    void logout(UserDto user);
 }
