@@ -14,7 +14,7 @@ import com.ssafy.xmagazine.dto.MagazineDto;
 public interface MagazineMapper {
 
 	@Select("SELECT * FROM magazine")
-	List<MagazineDto> selectMagazine(int id);
+	List<MagazineDto> selectMagazine();
 
 	@Select("SELECT * FROM magazine WHERE id = #{id}")
 	MagazineDto selectMagazineById(int id);

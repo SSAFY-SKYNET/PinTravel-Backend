@@ -26,6 +26,14 @@ public class SwaggerConfig {
     }
 
     @Bean
+    public GroupedOpenApi magazineApi() {
+        return GroupedOpenApi.builder()
+            .group("v1-magazine")
+            .pathsToMatch("/magazine/**")
+            .build();
+    }
+
+    @Bean
     public GroupedOpenApi adminApi() {
         return GroupedOpenApi.builder()
                 .group("v1-admin")
