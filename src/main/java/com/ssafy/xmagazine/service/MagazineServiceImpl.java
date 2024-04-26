@@ -9,17 +9,17 @@ import com.ssafy.xmagazine.dto.MagazineDto;
 @Service
 public class MagazineServiceImpl implements MagazineService {
 	@Override
-	public List<MagazineDto> getMagazineList() {
+	public List<MagazineDto> selectMagazine() {
 		return List.of();
 	}
 
 	@Override
-	public MagazineDto getMagazine(int id) {
+	public MagazineDto selectMagazineById(int id) {
 		return null;
 	}
 
 	@Override
-	public void createMagazine(MagazineDto magazineDto) {
+	public void insertMagazine(MagazineDto magazineDto) {
 
 	}
 
