@@ -13,8 +13,14 @@ public interface UserService {
 
     public void deleteUser(int userId);
 
-    public List<UserDto> getAllUser();
+    public List<UserDto> selectAllUser();
 
     public UserDto selectUserById(int userId);
+
+    public void login(UserDto userDto);
+
+    public void logout(UserDto userDto);
+
+    
 
 }
