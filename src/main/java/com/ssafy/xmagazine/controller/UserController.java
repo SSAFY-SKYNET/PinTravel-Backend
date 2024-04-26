@@ -8,15 +8,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ssafy.xmagazine.dto.UserDto;
 import com.ssafy.xmagazine.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ import java.util.List;
 @RequestMapping("/user")
 @Tag(name = "User", description = "User API")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -31,6 +33,7 @@ public class UserController {
     @PostMapping("/")
     @Operation(summary = "유저 생성", description = "새로운 유저를 생성합니다.")
     public void insertUser(@RequestBody UserDto user) {
+        log.info("UserDto: {}", user);
         userService.insertUser(user);
     }
 
@@ -52,6 +55,7 @@ public class UserController {
     @PostMapping("/login")
     @Operation(summary = "유저 로그인", description = "유저 로그인을 처리합니다.")
     public void login(@RequestBody UserDto user) {
+        log.info("UserDto: {}", user);
         userService.login(user);
     }
 
