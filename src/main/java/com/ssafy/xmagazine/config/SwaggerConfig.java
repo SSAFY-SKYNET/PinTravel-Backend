@@ -26,6 +26,14 @@ public class SwaggerConfig {
     }
 
     @Bean
+    public GroupedOpenApi adminApi() {
+        return GroupedOpenApi.builder()
+                .group("v1-admin")
+                .pathsToMatch("/admin/**")
+                .build();
+    }
+
+    @Bean
     public GroupedOpenApi magazineApi() {
         return GroupedOpenApi.builder()
             .group("v1-magazine")
@@ -34,10 +42,34 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public GroupedOpenApi adminApi() {
+    public GroupedOpenApi commentApi() {
         return GroupedOpenApi.builder()
-                .group("v1-admin")
-                .pathsToMatch("/admin/**")
-                .build();
+            .group("v1-comment")
+            .pathsToMatch("/comment/**")
+            .build();
+    }
+
+    @Bean
+    public GroupedOpenApi contentApi() {
+        return GroupedOpenApi.builder()
+            .group("v1-content")
+            .pathsToMatch("/content/**")
+            .build();
+    }
+
+    @Bean
+    public GroupedOpenApi locationApi() {
+        return GroupedOpenApi.builder()
+            .group("v1-location")
+            .pathsToMatch("/location/**")
+            .build();
+    }
+
+    @Bean
+    public GroupedOpenApi pageApi() {
+        return GroupedOpenApi.builder()
+            .group("v1-page")
+            .pathsToMatch("/page/**")
+            .build();
     }
 }
