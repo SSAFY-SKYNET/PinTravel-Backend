@@ -10,21 +10,23 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(t -> t
-                        .requestMatchers("/admin/**").permitAll()
-                        .requestMatchers("/user/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/login", "/register").permitAll() // "/login", "/register"
+	@Bean
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http
+			.cors(AbstractHttpConfigurer::disable)
+			.csrf(AbstractHttpConfigurer::disable)
+			.formLogin(AbstractHttpConfigurer::disable)
+			.authorizeHttpRequests(t -> t
+				.requestMatchers("/**").permitAll()
+				// .requestMatchers("/admin/**").permitAll()
+				// .requestMatchers("/user/**").permitAll()
+				// .requestMatchers("/magazine/**").permitAll()
+				// .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+				// .requestMatchers("/login", "/register").permitAll() // "/login", "/register"
 
-                        .anyRequest().authenticated());
+				.anyRequest().authenticated());
 
-        return http.build(); // SecurityFilterChain 객체 반환
-    }
+		return http.build(); // SecurityFilterChain 객체 반환
+	}
 
 }
