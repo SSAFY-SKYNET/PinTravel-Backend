@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.xmagazine.dto.MagazineDto;
-import com.ssafy.xmagazine.service.MagazineService;
+import com.ssafy.xmagazine.dto.CommentDto;
+import com.ssafy.xmagazine.service.CommentService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,59 +22,59 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/magazine")
-@Tag(name = "Magazine", description = "Magazine API")
+@RequestMapping("/comment")
+@Tag(name = "Comment", description = "Comment API")
 @RequiredArgsConstructor
-public class MagazineController {
-	private final MagazineService magazineService;
+public class CommentController {
+	private final CommentService commentService;
 
-	@GetMapping
-	@Operation(summary = "잡지목록 조회", description = "ID로 잡지 목록을 조회합니다.")
+	@GetMapping("/magazine/{magazineId}")
+	@Operation(summary = "잡지 ID로 댓글 조회", description = "잡지 ID로 댓글을 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "OK")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<List<MagazineDto>> selectMagazine() {
-		return ResponseEntity.status(HttpStatus.OK).body(magazineService.selectMagazine());
+	public ResponseEntity<List<CommentDto>> selectCommentByMagazineId(@PathVariable int magazineId) {
+		return ResponseEntity.status(HttpStatus.OK).body(commentService.selectCommentByMagazineId(magazineId));
 	}
 
 	@GetMapping("/{id}")
-	@Operation(summary = "ID로 잡지 조회", description = "ID로 잡지를 조회합니다.")
+	@Operation(summary = "ID로 댓글 조회", description = "ID로 댓글을 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "OK")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<MagazineDto> selectMagazineById(@PathVariable int id) {
-		return ResponseEntity.status(HttpStatus.OK).body(magazineService.selectMagazineById(id));
+	public ResponseEntity<CommentDto> selectCommentById(@PathVariable int id) {
+		return ResponseEntity.status(HttpStatus.OK).body(commentService.selectCommentById(id));
 	}
 
 	@PostMapping
-	@Operation(summary = "잡지 등록", description = "새로운 잡지를 등록합니다.")
+	@Operation(summary = "댓글 등록", description = "새로운 댓글을 등록합니다.")
 	@ApiResponse(responseCode = "201", description = "CREATED")
 	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> insertMagazine(@RequestBody MagazineDto magazineDto) {
-		magazineService.insertMagazine(magazineDto);
+	public ResponseEntity<Void> insertComment(@RequestBody CommentDto commentDto) {
+		commentService.insertComment(commentDto);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@PutMapping("/{id}")
-	@Operation(summary = "잡지 수정", description = "ID로 잡지를 수정합니다.")
+	@Operation(summary = "댓글 수정", description = "ID로 댓글을 수정합니다.")
 	@ApiResponse(responseCode = "200", description = "OK")
 	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> updateMagazine(@PathVariable int id, @RequestBody MagazineDto magazineDto) {
-		magazineDto.setId(id);
-		magazineService.updateMagazine(magazineDto);
+	public ResponseEntity<Void> updateComment(@PathVariable int id, @RequestBody CommentDto commentDto) {
+		commentDto.setId(id);
+		commentService.updateComment(commentDto);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
 	@DeleteMapping("/{id}")
-	@Operation(summary = "잡지 삭제", description = "ID로 잡지를 삭제합니다.")
+	@Operation(summary = "댓글 삭제", description = "ID로 댓글을 삭제합니다.")
 	@ApiResponse(responseCode = "204", description = "NO CONTENT")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> deleteMagazine(@PathVariable int id) {
-		magazineService.deleteMagazine(id);
+	public ResponseEntity<Void> deleteComment(@PathVariable int id) {
+		commentService.deleteComment(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 }

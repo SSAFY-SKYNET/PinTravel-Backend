@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.xmagazine.dto.MagazineDto;
-import com.ssafy.xmagazine.service.MagazineService;
+import com.ssafy.xmagazine.dto.LocationDto;
+import com.ssafy.xmagazine.service.LocationService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,59 +22,59 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/magazine")
-@Tag(name = "Magazine", description = "Magazine API")
+@RequestMapping("/location")
+@Tag(name = "Location", description = "Location API")
 @RequiredArgsConstructor
-public class MagazineController {
-	private final MagazineService magazineService;
+public class LocationController {
+	private final LocationService locationService;
 
-	@GetMapping
-	@Operation(summary = "잡지목록 조회", description = "ID로 잡지 목록을 조회합니다.")
+	@GetMapping("/magazine/{magazineId}")
+	@Operation(summary = "잡지 ID로 위치 조회", description = "잡지 ID로 위치를 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "OK")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<List<MagazineDto>> selectMagazine() {
-		return ResponseEntity.status(HttpStatus.OK).body(magazineService.selectMagazine());
+	public ResponseEntity<List<LocationDto>> selectLocationByMagazineId(@PathVariable int magazineId) {
+		return ResponseEntity.status(HttpStatus.OK).body(locationService.selectLocationByMagazineId(magazineId));
 	}
 
 	@GetMapping("/{id}")
-	@Operation(summary = "ID로 잡지 조회", description = "ID로 잡지를 조회합니다.")
+	@Operation(summary = "ID로 위치 조회", description = "ID로 위치를 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "OK")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<MagazineDto> selectMagazineById(@PathVariable int id) {
-		return ResponseEntity.status(HttpStatus.OK).body(magazineService.selectMagazineById(id));
+	public ResponseEntity<LocationDto> selectLocationById(@PathVariable int id) {
+		return ResponseEntity.status(HttpStatus.OK).body(locationService.selectLocationById(id));
 	}
 
 	@PostMapping
-	@Operation(summary = "잡지 등록", description = "새로운 잡지를 등록합니다.")
+	@Operation(summary = "위치 등록", description = "새로운 위치를 등록합니다.")
 	@ApiResponse(responseCode = "201", description = "CREATED")
 	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> insertMagazine(@RequestBody MagazineDto magazineDto) {
-		magazineService.insertMagazine(magazineDto);
+	public ResponseEntity<Void> insertLocation(@RequestBody LocationDto locationDto) {
+		locationService.insertLocation(locationDto);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@PutMapping("/{id}")
-	@Operation(summary = "잡지 수정", description = "ID로 잡지를 수정합니다.")
+	@Operation(summary = "위치 수정", description = "ID로 위치를 수정합니다.")
 	@ApiResponse(responseCode = "200", description = "OK")
 	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> updateMagazine(@PathVariable int id, @RequestBody MagazineDto magazineDto) {
-		magazineDto.setId(id);
-		magazineService.updateMagazine(magazineDto);
+	public ResponseEntity<Void> updateLocation(@PathVariable int id, @RequestBody LocationDto locationDto) {
+		locationDto.setId(id);
+		locationService.updateLocation(locationDto);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
 	@DeleteMapping("/{id}")
-	@Operation(summary = "잡지 삭제", description = "ID로 잡지를 삭제합니다.")
+	@Operation(summary = "위치 삭제", description = "ID로 위치를 삭제합니다.")
 	@ApiResponse(responseCode = "204", description = "NO CONTENT")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> deleteMagazine(@PathVariable int id) {
-		magazineService.deleteMagazine(id);
+	public ResponseEntity<Void> deleteLocation(@PathVariable int id) {
+		locationService.deleteLocation(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 }

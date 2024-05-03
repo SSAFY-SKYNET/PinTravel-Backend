@@ -19,7 +19,7 @@ public interface MagazineMapper {
 	@Select("SELECT * FROM magazine WHERE id = #{id}")
 	MagazineDto selectMagazineById(int id);
 
-	@Insert("INSERT INTO magazine (user_id, title, description) VALUES (#{user_id}, #{title}, #{description})")
+	@Insert("INSERT INTO magazine (user_id, title, description) VALUES (#{userId}, #{title}, #{description})")
 	void insertMagazine(MagazineDto magazineDto);
 
 	@Update("UPDATE magazine SET title = #{title}, description = #{description} WHERE id = #{id}")
