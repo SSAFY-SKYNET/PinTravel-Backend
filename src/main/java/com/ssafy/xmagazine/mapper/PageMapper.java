@@ -1,4 +1,4 @@
-package com.ssafy.xmagazine.domain.page;
+package com.ssafy.xmagazine.mapper;
 
 import java.util.List;
 
@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+
+import com.ssafy.xmagazine.domain.page.PageDto;
 
 @Mapper
 public interface PageMapper {

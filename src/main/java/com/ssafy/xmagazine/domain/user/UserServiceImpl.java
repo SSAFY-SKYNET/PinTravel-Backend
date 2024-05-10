@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ssafy.xmagazine.mapper.UserMapper;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
