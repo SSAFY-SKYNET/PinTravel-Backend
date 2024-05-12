@@ -36,40 +36,48 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi magazineApi() {
         return GroupedOpenApi.builder()
-            .group("v1-magazine")
-            .pathsToMatch("/magazine/**")
-            .build();
+                .group("v1-magazine")
+                .pathsToMatch("/magazine/**")
+                .build();
     }
 
     @Bean
     public GroupedOpenApi commentApi() {
         return GroupedOpenApi.builder()
-            .group("v1-comment")
-            .pathsToMatch("/comment/**")
-            .build();
+                .group("v1-comment")
+                .pathsToMatch("/comment/**")
+                .build();
     }
 
     @Bean
     public GroupedOpenApi contentApi() {
         return GroupedOpenApi.builder()
-            .group("v1-content")
-            .pathsToMatch("/content/**")
-            .build();
+                .group("v1-content")
+                .pathsToMatch("/content/**")
+                .build();
     }
 
     @Bean
     public GroupedOpenApi locationApi() {
         return GroupedOpenApi.builder()
-            .group("v1-location")
-            .pathsToMatch("/location/**")
-            .build();
+                .group("v1-location")
+                .pathsToMatch("/location/**")
+                .build();
     }
 
     @Bean
     public GroupedOpenApi pageApi() {
         return GroupedOpenApi.builder()
-            .group("v1-page")
-            .pathsToMatch("/page/**")
-            .build();
+                .group("v1-page")
+                .pathsToMatch("/page/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi attractionApi() {
+        return GroupedOpenApi.builder()
+                .group("v1-attraction")
+                .pathsToMatch("/attraction/**")
+                .build();
     }
 }
