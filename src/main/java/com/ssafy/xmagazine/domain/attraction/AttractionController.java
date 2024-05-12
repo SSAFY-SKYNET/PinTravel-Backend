@@ -2,7 +2,6 @@ package com.ssafy.xmagazine.domain.attraction;
 
 import java.util.List;
 
-import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +18,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/attraction")
@@ -55,7 +53,7 @@ public class AttractionController {
     @Operation(summary = "기존 관광지 정보 업데이트", description = "기존 관광지 정보를 업데이트합니다.")
     @ApiResponse(responseCode = "200", description = "관광지 정보가 성공적으로 업데이트되었습니다.")
     public ResponseEntity<Void> updateAttraction(@PathVariable int id, @RequestBody AttractionDto attractionDto) {
-        attractionDto.setContent_id(id);
+        attractionDto.setContentId(id);
         attractionService.updateAttraction(attractionDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
