@@ -37,7 +37,7 @@ public class SwaggerConfig {
     public GroupedOpenApi magazineApi() {
         return GroupedOpenApi.builder()
                 .group("v1-magazine")
-                .pathsToMatch("/magazine/**")
+                .pathsToMatch("/board/**")
                 .build();
     }
 
@@ -50,34 +50,50 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public GroupedOpenApi contentApi() {
+    public GroupedOpenApi followersApi() {
         return GroupedOpenApi.builder()
-                .group("v1-content")
-                .pathsToMatch("/content/**")
+                .group("v1-followers")
+                .pathsToMatch("/followers/**")
                 .build();
     }
 
     @Bean
-    public GroupedOpenApi locationApi() {
+    public GroupedOpenApi likesApi() {
         return GroupedOpenApi.builder()
-                .group("v1-location")
-                .pathsToMatch("/location/**")
+                .group("v1-likes")
+                .pathsToMatch("/likes/**")
                 .build();
     }
 
     @Bean
-    public GroupedOpenApi pageApi() {
+    public GroupedOpenApi pinApi() {
         return GroupedOpenApi.builder()
-                .group("v1-page")
-                .pathsToMatch("/page/**")
+                .group("v1-pin")
+                .pathsToMatch("/pin/**")
                 .build();
     }
 
     @Bean
-    public GroupedOpenApi attractionApi() {
+    public GroupedOpenApi pinboardsApi() {
         return GroupedOpenApi.builder()
-                .group("v1-attraction")
-                .pathsToMatch("/attraction/**")
-                .build();
+            .group("v1-pinboards")
+            .pathsToMatch("/pinboards/**")
+            .build();
+    }
+
+    @Bean
+    public GroupedOpenApi pintagsApi() {
+        return GroupedOpenApi.builder()
+            .group("v1-pintags")
+            .pathsToMatch("/pintags/**")
+            .build();
+    }
+
+    @Bean
+    public GroupedOpenApi tagsApi() {
+        return GroupedOpenApi.builder()
+            .group("v1-tags")
+            .pathsToMatch("/tags/**")
+            .build();
     }
 }

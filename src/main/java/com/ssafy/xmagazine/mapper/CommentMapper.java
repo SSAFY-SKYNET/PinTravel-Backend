@@ -8,13 +8,16 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.ssafy.xmagazine.domain.commnet.CommentDto;
+import com.ssafy.xmagazine.domain.comment.CommentDto;
 
 @Mapper
 public interface CommentMapper {
 
 	@Select("SELECT * FROM comment WHERE magazine_id = #{magazineId}")
-	List<CommentDto> selectCommentByMagazineId(int magazineId);
+	List<CommentDto> selectCommentByPinId(int pinId);
+
+	@Select("SELECT * FROM comment WHERE magazine_id = #{magazineId}")
+	List<CommentDto> selectCommentByUserId(int userId);
 
 	@Select("SELECT * FROM comment WHERE id = #{id}")
 	CommentDto selectCommentById(int id);
