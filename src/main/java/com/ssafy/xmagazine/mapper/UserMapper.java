@@ -12,24 +12,24 @@ import com.ssafy.xmagazine.domain.user.UserDto;
 
 @Mapper
 public interface UserMapper {
-    @Insert("INSERT INTO user (username, email, password) VALUES (#{username}, #{email}, #{password})")
+    @Insert("INSERT INTO Users (username, email, password_hash, profile_picture) VALUES (#{username}, #{email}, #{passwordHash}, #{profilePicture})")
     void insertUser(UserDto user);
 
-    @Select("SELECT * FROM user WHERE id = #{id}")
-    UserDto selectUserById(int id);
-
-    @Update("UPDATE user SET email = #{email}, password = #{password}, username = #{username}, createdAt = #{createdAt} WHERE id = #{id}")
+    @Update("UPDATE Users SET username = #{username}, email = #{email}, password_hash = #{passwordHash}, profile_picture = #{profilePicture}, last_login = #{lastLogin} WHERE user_id = #{userId}")
     void updateUser(UserDto user);
 
-    @Delete("DELETE FROM user WHERE id = #{id}")
-    void deleteUser(int id);
+    @Delete("DELETE FROM Users WHERE user_id = #{userId}")
+    void deleteUser(int userId);
 
-    @Select("SELECT * FROM user")
+    @Select("SELECT * FROM Users")
     List<UserDto> selectAllUser();
 
-    @Select("SELECT * FROM user WHERE email = #{email} AND password = #{password}")
-    UserDto login(UserDto user);
+    @Select("SELECT * FROM Users WHERE user_id = #{userId}")
+    UserDto selectUserById(int userId);
 
-    @Update("UPDATE user SET loggedIn = false WHERE id = #{id}")
-    void logout(UserDto user);
+    @Select("SELECT * FROM Users WHERE email = #{email} AND password_hash = #{passwordHash}")
+    UserDto login(UserDto userDto);
+
+    @Update("UPDATE Users SET last_login = CURRENT_TIMESTAMP WHERE user_id = #{userId}")
+    void logout(UserDto userDto);
 }
