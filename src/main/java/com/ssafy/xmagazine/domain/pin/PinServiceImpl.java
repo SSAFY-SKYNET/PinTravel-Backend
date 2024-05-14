@@ -73,6 +73,7 @@ public class PinServiceImpl implements PinService {
 	}
 
 	@Override
-	public void deletePin(int id) {
+	public void deletePin(int pinId) {
+		pinMapper.deletePin(pinId);
 	}
 }

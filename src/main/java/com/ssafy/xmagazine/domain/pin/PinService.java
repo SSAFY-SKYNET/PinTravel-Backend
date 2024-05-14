@@ -21,5 +21,5 @@ public interface PinService {
 
 	void updatePin(PinDto pin);
 
-	void deletePin(int id);
+	void deletePin(int pinId);
 }
