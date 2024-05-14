@@ -19,8 +19,8 @@ public interface PinMapper {
 	@Select("SELECT p.* FROM pins p JOIN likes l ON p.pin_id = l.pin_id WHERE p.is_deleted = false GROUP BY p.pin_id ORDER BY COUNT(l.like_id) DESC")
 	List<PinDto> selectPinByLikeCount();
 
-	@Select("SELECT p.* FROM pins p JOIN likes l ON p.pin_id = l.pin_id WHERE p.is_deleted = false GROUP BY p.pin_id ORDER BY COUNT(l.like_id) DESC, p.pin_id DESC LIMIT #{limit} OFFSET #{offset}")
-	List<PinDto> selectPinByLikeCountAndPage(@Param("offset") int offset, @Param("limit") int limit);
+	@Select("SELECT p.*, COUNT(l.like_id) AS like_count  FROM pins p LEFT JOIN likes l ON p.pin_id = l.pin_id WHERE p.is_deleted = false GROUP BY p.pin_id ORDER BY COUNT(l.like_id) DESC, p.pin_id DESC LIMIT #{limit} OFFSET #{offset}")
+ 	List<PinDto> selectPinByLikeCountAndPage(@Param("offset") int offset, @Param("limit") int limit);
 
 	@Select("SELECT * FROM pins WHERE user_id = #{userId} AND is_deleted = false")
 	List<PinDto> selectPinByUserId(int userId);

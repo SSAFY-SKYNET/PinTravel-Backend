@@ -18,6 +18,9 @@ public class PinDto {
 	@Schema(name = "userId", description = "핀 작성 유저 고유 ID")
 	private int userId;
 
+	@Schema(name = "title", description = "핀 제목")
+	private String title;
+
 	@Schema(name = "imageUrl", description = "핀 이미지 URL")
 	private String imageUrl;
 
