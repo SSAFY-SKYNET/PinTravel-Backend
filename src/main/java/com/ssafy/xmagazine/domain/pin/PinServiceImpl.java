@@ -63,6 +63,11 @@ public class PinServiceImpl implements PinService {
 	}
 
 	@Override
+	public List<PinDto> selectPinByPinIdAndPage(double longitude, double latitude, int offset, int limit) {
+		return pinMapper.selectPinByPinIdAndPage(longitude, latitude, offset, limit);
+	}
+
+	@Override
 	public void insertPin(PinDto pin) {
 		pinMapper.insertPin(pin);
 	}

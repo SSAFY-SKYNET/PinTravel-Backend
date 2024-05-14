@@ -40,6 +40,9 @@ public interface PinMapper {
 	@Select("SELECT p.* FROM pins p JOIN pin_boards pb ON p.pin_id = pb.pin_id WHERE pb.board_id = #{boardId} AND p.is_deleted = false ORDER BY p.pin_id DESC LIMIT #{limit} OFFSET #{offset}")
 	List<PinDto> selectPinByBoardAndPage(@Param("boardId") int boardId, @Param("offset") int offset, @Param("limit") int limit);
 
+	@Select("SELECT p.* FROM pins p WHERE p.is_deleted = false ORDER BY ST_Distance_Sphere(POINT(p.longitude, p.latitude), POINT(#{longitude}, #{latitude})) LIMIT #{limit} OFFSET #{offset}")
+	List<PinDto> selectPinByPinIdAndPage(@Param("longitude") double longitude, @Param("latitude") double latitude, @Param("offset") int offset, @Param("limit") int limit);
+
 	@Insert("INSERT INTO pins (user_id, image_url, description, address, latitude, longitude) VALUES (#{userId}, #{imageUrl}, #{description}, #{address}, #{latitude}, #{longitude})")
 	void insertPin(PinDto pinDto);
 
