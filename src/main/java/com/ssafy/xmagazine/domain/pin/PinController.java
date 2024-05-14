@@ -116,6 +116,21 @@ public class PinController {
 		return ResponseEntity.status(HttpStatus.OK).body(pinService.selectPinByBoardAndPage(boardId, offset, limit));
 	}
 
+	@GetMapping("/{pinId}/nearby/page")
+	public ResponseEntity<List<PinDto>> getPinsByPinIdAndPage(@PathVariable int pinId,
+		@RequestParam(defaultValue = "1") int page,
+		@RequestParam(defaultValue = "10") int limit) {
+		PinDto selectedPin = pinService.selectPinById(pinId);
+		if (selectedPin == null) {
+			return ResponseEntity.notFound().build();
+		}
+		double longitude = selectedPin.getLongitude();
+		double latitude = selectedPin.getLatitude();
+		int offset = (page - 1) * limit;
+		List<PinDto> nearbyPins = pinService.selectPinByPinIdAndPage(longitude, latitude, offset, limit);
+		return ResponseEntity.ok(nearbyPins);
+	}
+
 	@PostMapping
 	@Operation(summary = "핀 등록", description = "새로운 핀을 등록합니다.")
 	@ApiResponse(responseCode = "201", description = "CREATED")

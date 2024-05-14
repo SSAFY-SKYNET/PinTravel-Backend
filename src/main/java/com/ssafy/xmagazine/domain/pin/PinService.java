@@ -17,6 +17,8 @@ public interface PinService {
 	List<PinDto> selectPinByBoard(int boardId);
 	List<PinDto> selectPinByBoardAndPage(int boardId, int offset, int limit);
 
+	List<PinDto> selectPinByPinIdAndPage(double longitude, double latitude, int offset, int limit);
+
 	void insertPin(PinDto pin);
 
 	void updatePin(PinDto pin);
