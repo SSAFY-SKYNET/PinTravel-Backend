@@ -34,9 +34,9 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public GroupedOpenApi magazineApi() {
+    public GroupedOpenApi boardApi() {
         return GroupedOpenApi.builder()
-                .group("v1-magazine")
+                .group("v1-board")
                 .pathsToMatch("/board/**")
                 .build();
     }

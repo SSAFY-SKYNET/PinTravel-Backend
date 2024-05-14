@@ -12,6 +12,9 @@ import com.ssafy.xmagazine.domain.user.UserDto;
 
 @Mapper
 public interface UserMapper {
+    @Select("SELECT * FROM Users WHERE email = #{email}")
+    UserDto selectUserByEmail(String email);
+
     @Insert("INSERT INTO Users (username, email, password_hash, profile_picture) VALUES (#{username}, #{email}, #{passwordHash}, #{profilePicture})")
     void insertUser(UserDto user);
 
