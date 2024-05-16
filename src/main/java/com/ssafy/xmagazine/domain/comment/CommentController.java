@@ -35,7 +35,7 @@ public class CommentController {
 	}
 
 	@GetMapping("/user/{userId}")
-	@Operation(summary = "잡지 ID로 댓글 조회", description = "잡지 ID로 댓글을 조회합니다.")
+	@Operation(summary = "사용자 ID로 댓글 조회", description = "사용자 ID로 댓글을 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "OK")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
@@ -43,13 +43,13 @@ public class CommentController {
 		return ResponseEntity.status(HttpStatus.OK).body(commentService.selectCommentByUserId(userId));
 	}
 
-	@GetMapping("/{id}")
-	@Operation(summary = "ID로 댓글 조회", description = "ID로 댓글을 조회합니다.")
+	@GetMapping("/{commentId}")
+	@Operation(summary = "commentId로 댓글 조회", description = "commentId로 댓글을 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "OK")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<CommentDto> selectCommentById(@PathVariable int id) {
-		return ResponseEntity.status(HttpStatus.OK).body(commentService.selectCommentById(id));
+	public ResponseEntity<CommentDto> selectCommentById(@PathVariable int commentId) {
+		return ResponseEntity.status(HttpStatus.OK).body(commentService.selectCommentById(commentId));
 	}
 
 	@PostMapping
@@ -62,20 +62,20 @@ public class CommentController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
-	@PutMapping("/{id}")
-	@Operation(summary = "댓글 수정", description = "ID로 댓글을 수정합니다.")
+	@PutMapping("/{commentId}")
+	@Operation(summary = "댓글 수정", description = "commentId로 댓글을 수정합니다.")
 	@ApiResponse(responseCode = "200", description = "OK")
 	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> updateComment(@PathVariable int id, @RequestBody CommentDto commentDto) {
-		commentDto.setId(id);
+	public ResponseEntity<Void> updateComment(@PathVariable int commentId, @RequestBody CommentDto commentDto) {
+		commentDto.setCommentId(commentId);
 		commentService.updateComment(commentDto);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
-	@DeleteMapping("/{id}")
-	@Operation(summary = "댓글 삭제", description = "ID로 댓글을 삭제합니다.")
+	@DeleteMapping("/{commentId}")
+	@Operation(summary = "댓글 삭제", description = "commentId로 댓글을 삭제합니다.")
 	@ApiResponse(responseCode = "204", description = "NO CONTENT")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
