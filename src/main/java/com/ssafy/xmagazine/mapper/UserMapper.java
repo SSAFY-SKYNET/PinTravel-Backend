@@ -1,6 +1,7 @@
 package com.ssafy.xmagazine.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -30,9 +31,12 @@ public interface UserMapper {
     @Select("SELECT * FROM Users WHERE user_id = #{userId}")
     UserDto selectUserById(int userId);
 
-    @Select("SELECT * FROM Users WHERE email = #{email} AND password_hash = #{passwordHash}")
-    UserDto login(UserDto userDto);
+    @Update("UPDATE Users SET token = #{token} WHERE user_id = #{userId}")
+    void saveRefreshToken(int userId, String token);
 
-    @Update("UPDATE Users SET last_login = CURRENT_TIMESTAMP WHERE user_id = #{userId}")
-    void logout(UserDto userDto);
+    @Select("SELECT token FROM Users WHERE user_id = #{userId}")
+    String getRefreshToken(int userId);
+
+    @Update("UPDATE Users SET token = NULL WHERE user_id = #{userId}")
+    void deleteRefreshToken(int userId);
 }
