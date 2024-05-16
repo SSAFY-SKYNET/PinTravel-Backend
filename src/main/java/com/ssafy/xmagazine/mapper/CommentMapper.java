@@ -13,7 +13,7 @@ import com.ssafy.xmagazine.domain.comment.CommentDto;
 @Mapper
 public interface CommentMapper {
 
-	@Select("SELECT * FROM comments WHERE pin_id = #{pinId}")
+	@Select("SELECT * FROM comments WHERE pin_id = #{pinId} ORDER BY created_at ASC")
 	List<CommentDto> selectCommentByPinId(int pinId);
 
 	@Select("SELECT * FROM comments WHERE user_id = #{userId}")
@@ -30,4 +30,5 @@ public interface CommentMapper {
 
 	@Delete("DELETE FROM comments WHERE comment_id = #{commentId}")
 	void deleteComment(int commentId);
+
 }

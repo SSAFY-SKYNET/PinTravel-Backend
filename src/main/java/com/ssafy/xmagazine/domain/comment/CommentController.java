@@ -57,9 +57,10 @@ public class CommentController {
 	@ApiResponse(responseCode = "201", description = "CREATED")
 	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> insertComment(@RequestBody CommentDto commentDto) {
+	public ResponseEntity<List<CommentDto>> insertComment(@RequestBody CommentDto commentDto) {
 		commentService.insertComment(commentDto);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(commentService.selectCommentByPinId(commentDto.getPinId()));
 	}
 
 	@PutMapping("/{commentId}")
@@ -68,10 +69,11 @@ public class CommentController {
 	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> updateComment(@PathVariable int commentId, @RequestBody CommentDto commentDto) {
+	public ResponseEntity<List<CommentDto>> updateComment(@PathVariable int commentId,
+			@RequestBody CommentDto commentDto) {
 		commentDto.setCommentId(commentId);
 		commentService.updateComment(commentDto);
-		return ResponseEntity.status(HttpStatus.OK).build();
+		return ResponseEntity.status(HttpStatus.OK).body(commentService.selectCommentByPinId(commentDto.getPinId()));
 	}
 
 	@DeleteMapping("/{commentId}")
