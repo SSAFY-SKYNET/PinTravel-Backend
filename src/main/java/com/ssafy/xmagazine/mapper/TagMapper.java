@@ -22,4 +22,22 @@ public interface TagMapper {
 
 	@Select("SELECT * FROM Tags")
 	List<TagDto> selectAllTags();
+
+	@Select("<script>" +
+			"SELECT DISTINCT * FROM Tags " +
+			"WHERE " +
+			"<foreach item='item' collection='inputs' open='' separator=' OR ' close=''>" +
+			"name LIKE CONCAT('%', #{item}, '%')" +
+			"</foreach>" +
+			" LIMIT #{pageSize} OFFSET #{offset}" +
+			"</script>")
+	List<TagDto> selectTagsByMultipleInputs(@Param("inputs") List<String> inputs, @Param("pageSize") int pageSize,
+			@Param("pageNum") int pageNum, @Param("offset") int offset);
+
+	@Select("SELECT * FROM Tags " +
+			"WHERE name LIKE CONCAT('%', #{input}, '%') " +
+			"ORDER BY CHAR_LENGTH(name), name " +
+			"LIMIT 5")
+	List<TagDto> selectTagsByInput(@Param("input") String input);
+
 }

@@ -40,4 +40,14 @@ public class TagServiceImpl implements TagService {
 	public List<TagDto> selectAllTags() {
 		return tagMapper.selectAllTags();
 	}
+
+	@Override
+	public List<TagDto> selectTagsByMultipleInputs(List<String> inputs, int pageSize, int pageNum) {
+		return tagMapper.selectTagsByMultipleInputs(inputs, pageSize, pageNum, (pageNum - 1) * pageSize);
+	}
+
+	@Override
+	public List<TagDto> selectTagsByInput(String input) {
+		return tagMapper.selectTagsByInput(input);
+	}
 }
