@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void insertUser(UserDto userDto) {
 		// 비밀번호 해시
-		String hashedPassword = passwordEncoder.encode(userDto.getPasswordHash());
+		String hashedPassword = passwordEncoder.encode(userDto.getPassword());
 		userDto.setPasswordHash(hashedPassword);
 
 		userMapper.insertUser(userDto);

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,8 +31,11 @@ public class BoardController {
 	@ApiResponse(responseCode = "200", description = "OK")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<List<BoardDto>> selectPageByMagazineId(@PathVariable int userId) {
-		return ResponseEntity.status(HttpStatus.OK).body(boardService.selectBoardByUserId(userId));
+	public ResponseEntity<List<BoardDto>> selectBoardByUserId(@PathVariable int userId,
+		@RequestParam(defaultValue = "1") int page,
+		@RequestParam(defaultValue = "10") int limit) {
+		int offset = (page - 1) * limit;
+		return ResponseEntity.status(HttpStatus.OK).body(boardService.selectBoardByUserId(userId, offset, limit));
 	}
 
 	@GetMapping("/{boardId}")
@@ -39,7 +43,7 @@ public class BoardController {
 	@ApiResponse(responseCode = "200", description = "OK")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<BoardDto> selectPageById(@PathVariable int boardId) {
+	public ResponseEntity<BoardDto> selectBoardById(@PathVariable int boardId) {
 		return ResponseEntity.status(HttpStatus.OK).body(boardService.selectBoardById(boardId));
 	}
 
@@ -48,7 +52,7 @@ public class BoardController {
 	@ApiResponse(responseCode = "201", description = "CREATED")
 	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> insertPage(@RequestBody BoardDto boardDto) {
+	public ResponseEntity<Void> insertBoard(@RequestBody BoardDto boardDto) {
 		boardService.insertBoard(boardDto);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -59,9 +63,21 @@ public class BoardController {
 	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> updatePage(@PathVariable int boardId, @RequestBody BoardDto boardDto) {
+	public ResponseEntity<Void> updateBoard(@PathVariable int boardId, @RequestBody BoardDto boardDto) {
 		boardDto.setBoardId(boardId);
 		boardService.updateBoard(boardDto);
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+
+	@PutMapping("/thumbnail/{boardId}")
+	@Operation(summary = "Board 수정", description = "ID로 Board를 수정합니다.")
+	@ApiResponse(responseCode = "200", description = "OK")
+	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
+	@ApiResponse(responseCode = "404", description = "NOT FOUND")
+	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+	public ResponseEntity<Void> updateThumbnail(@PathVariable int boardId, @RequestBody BoardDto boardDto) {
+		boardDto.setBoardId(boardId);
+		boardService.updateThumbnail(boardDto);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
@@ -70,7 +86,7 @@ public class BoardController {
 	@ApiResponse(responseCode = "204", description = "NO CONTENT")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> deletePage(@PathVariable int boardId) {
+	public ResponseEntity<Void> deleteBoard(@PathVariable int boardId) {
 		boardService.deleteBoard(boardId);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}

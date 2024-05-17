@@ -18,6 +18,9 @@ public class BoardDto {
     @Schema(name = "userId", description = "게시판 작성자 ID")
     private int userId;
 
+    @Schema(name = "thumbnail", description = "Board 썸네일")
+    private String thumbnail;
+
     @Schema(name = "title", description = "게시판 제목")
     private String title;
 
