@@ -50,4 +50,9 @@ public class TagServiceImpl implements TagService {
 	public List<TagDto> selectTagsByInput(String input) {
 		return tagMapper.selectTagsByInput(input);
 	}
+
+	@Override
+	public List<TagDto> selectTagsByIds(List<Integer> tagIds) {
+		return tagMapper.selectTagsByIds(tagIds);
+	}
 }

@@ -16,4 +16,6 @@ public interface TagService {
 	List<TagDto> selectTagsByMultipleInputs(List<String> inputs, int pageSize, int pageNum);
 
 	List<TagDto> selectTagsByInput(String input);
+
+	List<TagDto> selectTagsByIds(List<Integer> tagIds);
 }
