@@ -44,6 +44,14 @@ public class TagController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
+	@PostMapping("/multi")
+	@Operation(summary = "태그 조회", description = "여러 태그 정보를 조회합니다.")
+	@ApiResponse(responseCode = "200", description = "OK")
+	public ResponseEntity<List<TagDto>> selectTagsByIds(@RequestBody List<Integer> tagIds) {
+		List<TagDto> tagDtos = tagService.selectTagsByIds(tagIds);
+		return ResponseEntity.ok(tagDtos);
+	}
+
 	@GetMapping("/{tagId}")
 	@Operation(summary = "태그 조회", description = "태그 정보를 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "OK")
