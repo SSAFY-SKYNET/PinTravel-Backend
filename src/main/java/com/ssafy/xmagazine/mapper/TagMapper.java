@@ -40,4 +40,16 @@ public interface TagMapper {
 			"LIMIT 5")
 	List<TagDto> selectTagsByInput(@Param("input") String input);
 
+	@Select("<script>" +
+        "SELECT * FROM Tags " +
+        "WHERE tag_id IN " +
+        "<foreach item='id' collection='tagIds' open='(' separator=',' close=')'>" +
+        "#{id}" +
+        "</foreach> " +
+        "ORDER BY FIELD(tag_id, " +
+        "<foreach item='id' collection='tagIds' separator=','>" +
+        "#{id}" +
+        "</foreach>)" +
+        "</script>")
+	List<TagDto> selectTagsByIds(@Param("tagIds") List<Integer> tagIds);
 }
