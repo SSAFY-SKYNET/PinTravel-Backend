@@ -34,7 +34,7 @@ public class UserController {
 	private final UserService userService;
 	private final JWTUtil jwtUtil;
 
-	@PostMapping("/")
+	@PostMapping("/signup")
 	@Operation(summary = "유저 생성", description = "새로운 유저를 생성합니다.")
 	public void insertUser(@RequestBody UserDto user) {
 		log.info("UserDto: {}", user);

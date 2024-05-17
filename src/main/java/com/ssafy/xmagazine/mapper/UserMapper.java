@@ -19,7 +19,7 @@ public interface UserMapper {
     @Insert("INSERT INTO Users (username, email, password_hash, profile_picture) VALUES (#{username}, #{email}, #{passwordHash}, #{profilePicture})")
     void insertUser(UserDto user);
 
-    @Update("UPDATE Users SET username = #{username}, email = #{email}, password_hash = #{passwordHash}, profile_picture = #{profilePicture}, last_login = #{lastLogin} WHERE user_id = #{userId}")
+    @Update("UPDATE Users SET username = #{username}, password_hash = #{passwordHash}, profile_picture = #{profilePicture} WHERE user_id = #{userId}")
     void updateUser(UserDto user);
 
     @Delete("DELETE FROM Users WHERE user_id = #{userId}")

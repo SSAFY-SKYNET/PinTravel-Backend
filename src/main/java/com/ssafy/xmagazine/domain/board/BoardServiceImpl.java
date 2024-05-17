@@ -20,8 +20,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardDto> selectBoardByUserId(int userId) {
-		return boardMapper.selectBoardByUserId(userId);
+	public List<BoardDto> selectBoardByUserId(int userId, int offset, int limit) {
+		return boardMapper.selectBoardByUserId(userId, offset, limit);
 	}
 
 	@Override
@@ -37,6 +37,11 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void updateBoard(BoardDto boardDto) {
 		boardMapper.updateBoard(boardDto);
+	}
+
+	@Override
+	public void updateThumbnail(BoardDto boardDto) {
+		boardMapper.updateThumbnail(boardDto);
 	}
 
 	@Override
