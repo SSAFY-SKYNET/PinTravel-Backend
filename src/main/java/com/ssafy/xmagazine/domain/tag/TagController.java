@@ -60,10 +60,11 @@ public class TagController {
 		return ResponseEntity.ok(tagDtoList);
 	}
 
-	@GetMapping("/search")
+	@PostMapping("/search")
 	@Operation(summary = "관련된 태그 모두 조회", description = "입력된 태그들과 관련된 태그 정보를 모두 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "OK")
-	public ResponseEntity<List<TagDto>> selectTagsByMultipleInputs(@RequestBody List<String> inputs,
+	public ResponseEntity<List<TagDto>> selectTagsByMultipleInputs(
+			@RequestBody List<String> inputs,
 			@RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
 			@RequestParam(value = "pageNum", defaultValue = "1") int pageNum) {
 		List<TagDto> tagDtoList = tagService.selectTagsByMultipleInputs(inputs, pageSize, pageNum);
