@@ -81,4 +81,9 @@ public class PinServiceImpl implements PinService {
 	public void deletePin(int pinId) {
 		pinMapper.deletePin(pinId);
 	}
+
+	@Override
+	public List<PinDto> selectPinByMultiTagAndPage(List<String> tagNames, int offset, int limit) {
+		return pinMapper.selectPinByMultiTagAndPage(tagNames, offset, limit);
+	}
 }
