@@ -47,7 +47,7 @@ public interface PinMapper {
 	List<PinDto> selectPinByPinIdAndPage(@Param("longitude") double longitude, @Param("latitude") double latitude,
 			@Param("offset") int offset, @Param("limit") int limit);
 
-	@Insert("INSERT INTO pins (user_id, image_url, description, address, latitude, longitude) VALUES (#{userId}, #{imageUrl}, #{description}, #{address}, #{latitude}, #{longitude})")
+	@Insert("INSERT INTO pins (user_id, title, image_url, description, address, latitude, longitude) VALUES (#{userId}, #{title}, #{imageUrl}, #{description}, #{address}, #{latitude}, #{longitude})")
 	void insertPin(PinDto pinDto);
 
 	@Update("UPDATE pins SET description = #{description} WHERE pin_id = #{pinId}")
