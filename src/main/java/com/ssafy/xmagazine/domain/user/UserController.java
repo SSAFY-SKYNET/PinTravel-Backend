@@ -71,8 +71,25 @@ public class UserController {
 
 	@PostMapping("/update")
 	@Operation(summary = "유저 정보 업데이트", description = "유저 정보를 업데이트합니다.")
-	public void updateUser(@RequestBody UserDto user) {
-		userService.updateUser(user);
+	public void updateUser(@RequestBody UserDto user, HttpServletRequest request) {
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.ACCEPTED;
+		String token = request.getHeader("Authorization");
+		if (jwtUtil.checkToken(token)) {
+			log.info("사용 가능한 토큰!!!");
+			try {
+				int userId = jwtUtil.getUserId(token);
+				user.setUserId(userId);
+				userService.updateUser(user);
+				status = HttpStatus.OK;
+			} catch (Exception e) {
+				log.error("정보조회 실패: {}", e);
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+			}
+		} else {
+			log.error("사용 불가능 토큰!!!");
+			status = HttpStatus.UNAUTHORIZED;
+		}
 	}
 
 	@DeleteMapping("/{id}")
