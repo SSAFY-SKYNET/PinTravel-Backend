@@ -10,9 +10,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ssafy.xmagazine.exception.UnAuthorizedException;
+import com.ssafy.xmagazine.util.JWTUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BoardController {
 	private final BoardService boardService;
+	private final JWTUtil jwtUtil;
 
 	@GetMapping("/user/{userId}")
 	@Operation(summary = "사용자 ID로 Board 조회", description = "사용자 ID로 Board를 조회합니다.")
@@ -52,9 +57,21 @@ public class BoardController {
 	@ApiResponse(responseCode = "201", description = "CREATED")
 	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> insertBoard(@RequestBody BoardDto boardDto) {
-		boardService.insertBoard(boardDto);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+	public ResponseEntity<Integer> insertBoard(@RequestBody BoardDto boardDto,
+		@RequestHeader("Authorization") String token) {
+		try {
+			// JWT에서 userId 추출
+			int userId = jwtUtil.getUserId(token);
+			boardDto.setUserId(userId);
+
+			int boardId = boardService.insertBoard(boardDto);
+
+			return ResponseEntity.status(HttpStatus.CREATED).body(boardId);
+		} catch (UnAuthorizedException e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 
 	@PutMapping("/{boardId}")
