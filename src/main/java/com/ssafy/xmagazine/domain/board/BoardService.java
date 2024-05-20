@@ -8,7 +8,7 @@ public interface BoardService {
 
 	BoardDto selectBoardById(int boardId);
 
-	void insertBoard(BoardDto boardDto);
+	int insertBoard(BoardDto boardDto);
 
 	void updateBoard(BoardDto boardDto);
 

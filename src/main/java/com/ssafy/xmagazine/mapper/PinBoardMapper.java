@@ -7,11 +7,11 @@ import java.util.List;
 
 @Mapper
 public interface PinBoardMapper {
-	@Insert("INSERT INTO PinBoards (pin_id, board_id) VALUES (#{pinId}, #{boardId})")
+	@Insert("INSERT INTO PinBoards (pin_id, board_id, user_id) VALUES (#{pinId}, #{boardId}, #{userId})")
 	void insertPinBoard(PinBoardDto pinBoardDto);
 
-	@Delete("DELETE FROM PinBoards WHERE pin_id = #{pinId} AND board_id = #{boardId}")
-	void deletePinBoard(@Param("pinId") int pinId, @Param("boardId") int boardId);
+	@Delete("DELETE FROM PinBoards WHERE pin_id = #{pinId} AND board_id = #{boardId} AND user_id = #{userId}")
+	void deletePinBoard(@Param("pinId") int pinId, @Param("boardId") int boardId, @Param("userId") int userId);
 
 	@Select("SELECT pin_id FROM PinBoards WHERE board_id = #{boardId}")
 	List<Integer> selectPinIdsByBoardId(int boardId);
