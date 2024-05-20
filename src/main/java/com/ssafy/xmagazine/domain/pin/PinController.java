@@ -10,9 +10,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ssafy.xmagazine.exception.UnAuthorizedException;
+import com.ssafy.xmagazine.util.JWTUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,9 +27,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Pin", description = "Pin API")
 public class PinController {
 	private final PinService pinService;
+	private final JWTUtil jwtUtil;
 
-	public PinController(PinService pinService) {
+	public PinController(PinService pinService, JWTUtil jwtUtil) {
 		this.pinService = pinService;
+		this.jwtUtil = jwtUtil;
+
 	}
 
 	@GetMapping("/{pinId}")
@@ -136,9 +143,19 @@ public class PinController {
 	@ApiResponse(responseCode = "201", description = "CREATED")
 	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> createPin(@RequestBody PinDto pin) {
-		pinService.insertPin(pin);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+	public ResponseEntity<Void> createPin(@RequestBody PinDto pin, @RequestHeader("Authorization") String token) {
+		try {
+			// JWT에서 userId 추출
+			int userId = jwtUtil.getUserId(token);
+			pin.setUserId(userId);
+
+			pinService.insertPin(pin);
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (UnAuthorizedException e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 
 	@PutMapping("/{pinId}")

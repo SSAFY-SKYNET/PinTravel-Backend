@@ -35,24 +35,24 @@ public class JWTUtil {
 		return create(userId, "refresh-token", refreshTokenExpireTime);
 	}
 
-	//	Token 발급
-	//		key : Claim에 셋팅될 key 값
-	//		value : Claim에 셋팅 될 data 값
-	//		subject : payload에 sub의 value로 들어갈 subject값
-	//		expire : 토큰 유효기간 설정을 위한 값
-	//		jwt 토큰의 구성 : header + payload + signature
+	// Token 발급
+	// key : Claim에 셋팅될 key 값
+	// value : Claim에 셋팅 될 data 값
+	// subject : payload에 sub의 value로 들어갈 subject값
+	// expire : 토큰 유효기간 설정을 위한 값
+	// jwt 토큰의 구성 : header + payload + signature
 	private String create(int userId, String subject, long expireTime) {
 		Claims claims = Jwts.claims()
-			.setSubject(subject)
-			.setIssuedAt(new Date())
-			.setExpiration(new Date(System.currentTimeMillis() + expireTime));
+				.setSubject(subject)
+				.setIssuedAt(new Date())
+				.setExpiration(new Date(System.currentTimeMillis() + expireTime));
 
 		claims.put("userId", userId);
 
 		String jwt = Jwts.builder()
-			.setHeaderParam("typ", "JWT").setClaims(claims)
-			.signWith(SignatureAlgorithm.HS256, this.generateKey())
-			.compact();
+				.setHeaderParam("typ", "JWT").setClaims(claims)
+				.signWith(SignatureAlgorithm.HS256, this.generateKey())
+				.compact();
 
 		return jwt;
 	}
@@ -83,6 +83,7 @@ public class JWTUtil {
 	}
 
 	public int getUserId(String token) {
+		System.out.println("token : " + token);
 		Jws<Claims> claims = null;
 		try {
 			claims = Jwts.parser().setSigningKey(this.generateKey()).parseClaimsJws(token);
