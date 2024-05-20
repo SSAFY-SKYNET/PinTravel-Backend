@@ -36,10 +36,10 @@ public interface PinMapper {
 	List<PinDto> selectPinByTagAndPage(@Param("tagId") int tagId, @Param("offset") int offset,
 			@Param("limit") int limit);
 
-	@Select("SELECT p.* FROM pins p JOIN pinboards pb ON p.pin_id = pb.pin_id JOIN boards b ON pb.board_id = b.board_id WHERE b.board_id = #{boardId} AND p.is_deleted = false")
+	@Select("SELECT p.* FROM pins p JOIN boards pb ON p.pin_id = pb.pin_id JOIN boards b ON pb.board_id = b.board_id WHERE b.board_id = #{boardId} AND p.is_deleted = false")
 	List<PinDto> selectPinByBoard(int boardId);
 
-	@Select("SELECT p.* FROM pins p JOIN pin_boards pb ON p.pin_id = pb.pin_id WHERE pb.board_id = #{boardId} AND p.is_deleted = false ORDER BY p.pin_id DESC LIMIT #{limit} OFFSET #{offset}")
+	@Select("SELECT p.* FROM pins p JOIN pinboards pb ON p.pin_id = pb.pin_id WHERE pb.board_id = #{boardId} AND p.is_deleted = false ORDER BY p.pin_id DESC LIMIT #{limit} OFFSET #{offset}")
 	List<PinDto> selectPinByBoardAndPage(@Param("boardId") int boardId, @Param("offset") int offset,
 			@Param("limit") int limit);
 
