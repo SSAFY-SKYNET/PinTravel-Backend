@@ -1,7 +1,6 @@
 package com.ssafy.xmagazine.domain.user;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,8 +29,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void insertUser(UserDto userDto) {
 		// 비밀번호 해시
-		String hashedPassword = passwordEncoder.encode(userDto.getPassword());
-		userDto.setPasswordHash(hashedPassword);
+		if (userDto.getPassword() != null) {
+			String hashedPassword = passwordEncoder.encode(userDto.getPassword());
+			userDto.setPasswordHash(hashedPassword);
+		}
 
 		userMapper.insertUser(userDto);
 	}
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
 	public void updateUser(UserDto userDto) {
 		String hashedPassword = passwordEncoder.encode(userDto.getPassword());
 		userDto.setPasswordHash(hashedPassword);
-		
+
 		userMapper.updateUser(userDto);
 	}
 
@@ -81,4 +82,28 @@ public class UserServiceImpl implements UserService {
 		userMapper.deleteRefreshToken(userId);
 	}
 
+	@Override
+	public UserDto selectUserByEmail(String email) {
+		return userMapper.selectUserByEmail(email);
+	}
+
+	public boolean isEmailAvailable(String email) {
+		return userMapper.selectUserByEmail(email) == null;
+	}
+
+	public void addUser(UserDto userDto) throws Exception {
+		if (!isEmailAvailable(userDto.getEmail())) {
+			throw new Exception("이메일이 이미 사용 중입니다.");
+		}
+		userMapper.insertUser(userDto);
+	}
+
+	@Override
+	public UserDto oauthLogin(UserDto userDto) {
+		UserDto existingUser = userMapper.selectUserByEmail(userDto.getEmail());
+		if (existingUser == null) {
+			userMapper.insertUser(userDto);
+		}
+		return existingUser;
+	}
 }

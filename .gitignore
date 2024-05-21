@@ -4,7 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 application-aws.properties
-
+application-oauth.properties
+apllication-oauth.properties
 ### STS ###
 .apt_generated
 .classpath
