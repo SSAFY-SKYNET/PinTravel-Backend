@@ -25,30 +25,13 @@ public class LikeServiceImpl implements LikeService {
 	}
 
 	@Override
-	public void insertLike(LikeDto likeDto) {
-		PinDto pin = pinMapper.selectPinById(likeDto.getPinId());
-		UserDto user = userMapper.selectUserById(likeDto.getUserId());
-
-		if (pin == null) {
-			throw new IllegalArgumentException("Pin does not exist.");
-		}
-		if (user == null) {
-			throw new IllegalArgumentException("User does not exist.");
-		}
-		if (likeMapper.selectLike(likeDto) != null) {
-			throw new IllegalArgumentException("User already liked this pin.");
-		}
-
-		likeMapper.insertLike(likeDto);
+	public void insertLike(int pinId, int userId) {
+		likeMapper.insertLike(pinId, userId);
 	}
 
 	@Override
-	public void deleteLike(int likeId) {
-		if (likeMapper.selectLikeById(likeId) == null) {
-			throw new IllegalArgumentException("Like does not exist.");
-		}
-
-		likeMapper.deleteLike(likeId);
+	public void deleteLike(int pinId, int userId) {
+		likeMapper.deleteLike(pinId, userId);
 	}
 
 	@Override

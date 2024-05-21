@@ -22,8 +22,8 @@ public class PinBoardServiceImpl implements PinBoardService {
 	}
 
 	@Override
-	public void deletePinBoard(int pinId, int boardId) {
-		pinBoardMapper.deletePinBoard(pinId, boardId);
+	public void deletePinBoard(int pinId, int boardId, int userId) {
+		pinBoardMapper.deletePinBoard(pinId, boardId, userId);
 	}
 
 	@Override

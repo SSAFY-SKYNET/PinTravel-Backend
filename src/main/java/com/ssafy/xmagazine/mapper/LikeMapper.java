@@ -1,6 +1,7 @@
 package com.ssafy.xmagazine.mapper;
 
 import com.ssafy.xmagazine.domain.like.LikeDto;
+
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -8,10 +9,10 @@ import java.util.List;
 @Mapper
 public interface LikeMapper {
 	@Insert("INSERT INTO Likes (pin_id, user_id) VALUES (#{pinId}, #{userId})")
-	void insertLike(LikeDto likeDto);
+	void insertLike(int pinId, int userId);
 
-	@Delete("DELETE FROM Likes WHERE like_id = #{likeId}")
-	void deleteLike(int likeId);
+	@Delete("DELETE FROM Likes WHERE pin_id = #{pinId} AND user_id = #{userId}")
+	void deleteLike(int pinId, int userId);
 
 	@Select("SELECT * FROM Likes WHERE pin_id = #{pinId}")
 	List<LikeDto> selectLikesByPin(int pinId);
