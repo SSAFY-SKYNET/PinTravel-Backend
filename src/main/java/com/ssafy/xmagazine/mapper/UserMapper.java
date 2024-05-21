@@ -20,7 +20,7 @@ public interface UserMapper {
     int insertUser(UserDto user);
 
     @Update("UPDATE Users SET username = #{username}, password_hash = #{passwordHash}, profile_picture = #{profilePicture} WHERE user_id = #{userId}")
-    void updateUser(UserDto user);
+    int updateUser(UserDto user);
 
     @Delete("DELETE FROM Users WHERE user_id = #{userId}")
     void deleteUser(int userId);
