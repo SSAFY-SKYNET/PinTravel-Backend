@@ -143,13 +143,37 @@ public class BoardController {
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
-	@DeleteMapping("/{boardId}")
-	@Operation(summary = "Board 삭제", description = "ID로 Board를 삭제합니다.")
+	@PutMapping("/delete/{boardId}")
+	@Operation(summary = "Board 삭제", description = "ID로 Board를 논리적으로 삭제합니다.")
 	@ApiResponse(responseCode = "204", description = "NO CONTENT")
+	@ApiResponse(responseCode = "403", description = "FORBIDDEN")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> deleteBoard(@PathVariable int boardId) {
-		boardService.deleteBoard(boardId);
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	public ResponseEntity<Void> logicalDeleteBoard(@PathVariable int boardId,
+		@RequestHeader("Authorization") String token) {
+		try {
+			// JWT에서 userId 추출
+			int userId = jwtUtil.getUserId(token);
+
+			// 기존 Board 조회
+			BoardDto existingBoard = boardService.selectBoardById(boardId);
+			if (existingBoard == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			}
+
+			// 삭제 권한 확인
+			if (existingBoard.getUserId() != userId) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+			}
+
+			// Board 논리적 삭제
+			boardService.deleteBoard(boardId);
+
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		} catch (UnAuthorizedException e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 }

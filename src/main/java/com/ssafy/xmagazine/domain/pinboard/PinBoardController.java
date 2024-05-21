@@ -50,9 +50,18 @@ public class PinBoardController {
 	@Operation(summary = "핀-보드 관계 삭제", description = "핀과 보드의 관계를 삭제합니다.")
 	@ApiResponse(responseCode = "204", description = "NO_CONTENT")
 	public ResponseEntity<Void> deletePinBoard(@PathVariable int pinId, @PathVariable int boardId,
-		@PathVariable int userId) {
-		pinBoardService.deletePinBoard(pinId, boardId, userId);
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		@RequestHeader("Authorization") String token) {
+		try {
+			// JWT에서 userId 추출
+			int userId = jwtUtil.getUserId(token);
+
+			pinBoardService.deletePinBoard(pinId, boardId, userId);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		} catch (UnAuthorizedException e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 
 	@GetMapping("/board/{boardId}")
