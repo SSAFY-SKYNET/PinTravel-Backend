@@ -11,23 +11,23 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.sort.ScriptSortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
-import org.elasticsearch.script.Script;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.xmagazine.mapper.PinMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
 @Transactional
+@Slf4j
 public class PinServiceImpl implements PinService {
 
 	private final PinMapper pinMapper;
@@ -117,59 +117,100 @@ public class PinServiceImpl implements PinService {
 		return executeSearch(searchRequest);
 	}
 
-	private SearchRequest buildSearchRequest(String indexName, List<String> tagNames, int offset, int limit) {
+	private SearchRequest buildSearchRequest(String indexName, List<String> keywords, int offset, int limit) {
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		searchSourceBuilder.query(buildBoolQuery(tagNames));
-		configureSort(searchSourceBuilder);
-		searchSourceBuilder.from(offset);
-		searchSourceBuilder.size(limit);
+		searchSourceBuilder.query(buildBoolQuery(keywords)); // 키워드 기반으로 불리언 쿼리 생성
+		configureSort(searchSourceBuilder); // 정렬 구성
+		searchSourceBuilder.from(offset); // 검색 시작 위치 설정
+		searchSourceBuilder.size(limit); // 검색 결과의 최대 크기 설정
 
-		SearchRequest searchRequest = new SearchRequest(indexName);
-		searchRequest.source(searchSourceBuilder);
+		SearchRequest searchRequest = new SearchRequest(indexName); // 새 검색 요청 생성
+		searchRequest.source(searchSourceBuilder); // 검색 요청에 검색 소스 설정
 		return searchRequest;
 	}
 
-	private BoolQueryBuilder buildBoolQuery(List<String> tagNames) {
-		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-		BoolQueryBuilder tagMatchQuery = QueryBuilders.boolQuery();
+	private BoolQueryBuilder buildBoolQuery(List<String> keywords) {
+		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery(); // 불리언 쿼리 빌더 생성
+		MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(String.join(" ", keywords))
+				.field("title", 5.0f)
+				.field("address", 4.0f)
+				.field("tags.name", 3.0f)
+				.field("description", 2.0f)
+				.fuzziness("AUTO")
+				.prefixLength(2)
+				.maxExpansions(10)
+				.type(MultiMatchQueryBuilder.Type.BEST_FIELDS);
 
-		tagMatchQuery.should(QueryBuilders.termsQuery("tags.keyword", tagNames));
-		tagNames.forEach(tagName -> {
-			tagMatchQuery.should(QueryBuilders.matchQuery("title", tagName));
-			tagMatchQuery.should(QueryBuilders.matchQuery("description", tagName));
-			tagMatchQuery.should(QueryBuilders.matchQuery("address", tagName));
-		});
-
-		boolQueryBuilder.must(tagMatchQuery);
-		boolQueryBuilder.must(QueryBuilders.termQuery("isDeleted", false));
+		boolQueryBuilder.must(multiMatchQueryBuilder);
+		boolQueryBuilder.must(QueryBuilders.termQuery("isDeleted", false)); // 삭제되지 않은 항목만 검색
 		return boolQueryBuilder;
 	}
 
 	private void configureSort(SearchSourceBuilder sourceBuilder) {
-		sourceBuilder.sort(SortBuilders.fieldSort("likeCount").order(SortOrder.DESC));
-		sourceBuilder.sort(SortBuilders
-				.scriptSort(new Script("doc['tags.keyword'].length"), ScriptSortBuilder.ScriptSortType.NUMBER)
-				.order(SortOrder.DESC));
+		sourceBuilder.sort(SortBuilders.scoreSort().order(SortOrder.DESC)); // 점수 기반 정렬
+		sourceBuilder.sort(SortBuilders.fieldSort("likeCount").order(SortOrder.DESC)); // 좋아요 수에 따라 내림차순 정렬
 	}
 
 	private List<PinDto> executeSearch(SearchRequest searchRequest) {
 		try {
-			SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+			SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT); // 검색 요청 실행
 			return Arrays.stream(searchResponse.getHits().getHits())
-					.map(hit -> convertToPinDto(hit.getSourceAsString()))
+					.map(hit -> convertToPinDto(hit.getSourceAsString())) // 검색 결과를 PinDto 객체로 변환
 					.collect(Collectors.toList());
 		} catch (IOException e) {
-			System.err.println("Failed to execute search query: " + e.getMessage());
-			return Collections.emptyList();
+			System.err.println("Failed to execute search query: " + e.getMessage()); // 검색 실패 시 에러 로그 출력
+			return Collections.emptyList(); // 예외 발생 시 빈 리스트 반환
 		}
 	}
 
 	private PinDto convertToPinDto(String source) {
 		try {
-			return objectMapper.readValue(source, PinDto.class);
+			return objectMapper.readValue(source, PinDto.class); // JSON 문자열을 PinDto 객체로 변환
 		} catch (IOException e) {
-			System.err.println("Error parsing JSON: " + e.getMessage());
-			return null;
+			System.err.println("Error parsing JSON: " + e.getMessage()); // JSON 파싱 실패 시 에러 로그 출력
+			return null; // 예외 발생 시 null 반환
+		}
+	}
+
+	public List<PinDto> selectPinByNearest(PinDto pin, int offset, int limit) {
+		SearchRequest searchRequest = buildProximitySearchRequest("distance_index", pin, offset, limit);
+		return executeProximitySearch(searchRequest);
+	}
+
+	private SearchRequest buildProximitySearchRequest(String indexName, PinDto pin, int offset, int limit) {
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		searchSourceBuilder.query(buildGeoQuery(pin)); // 위치 기반 쿼리 생성
+		searchSourceBuilder.sort(SortBuilders.geoDistanceSort("location", pin.getLatitude(), pin.getLongitude())
+				.order(SortOrder.ASC)); // 거리 기준 오름차순 정렬
+		searchSourceBuilder.from(offset); // 검색 시작 위치 설정
+		searchSourceBuilder.size(limit); // 검색 결과의 최대 크기 설정
+
+		// 필요한 필드만 반환
+		searchSourceBuilder.fetchSource(new String[] { "pinId", "title", "latitude", "longitude" }, null);
+
+		SearchRequest searchRequest = new SearchRequest(indexName); // 새 검색 요청 생성
+		searchRequest.source(searchSourceBuilder); // 검색 요청에 검색 소스 설정
+		return searchRequest;
+	}
+
+	private BoolQueryBuilder buildGeoQuery(PinDto pin) {
+		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		boolQueryBuilder.must(QueryBuilders.geoDistanceQuery("location")
+				.point(pin.getLatitude(), pin.getLongitude())
+				.distance("50km")); // 원하는 검색 반경 설정
+		boolQueryBuilder.must(QueryBuilders.termQuery("isDeleted", false)); // 삭제되지 않은 항목만 검색
+		return boolQueryBuilder;
+	}
+
+	private List<PinDto> executeProximitySearch(SearchRequest searchRequest) {
+		try {
+			SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT); // 검색 요청 실행
+			return Arrays.stream(searchResponse.getHits().getHits())
+					.map(hit -> convertToPinDto(hit.getSourceAsString())) // 검색 결과를 PinDto 객체로 변환
+					.collect(Collectors.toList());
+		} catch (IOException e) {
+			System.err.println("Failed to execute search query: " + e.getMessage()); // 검색 실패 시 에러 로그 출력
+			return Collections.emptyList(); // 예외 발생 시 빈 리스트 반환
 		}
 	}
 }
