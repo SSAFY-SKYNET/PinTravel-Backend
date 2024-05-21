@@ -15,18 +15,21 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-			.cors(AbstractHttpConfigurer::disable)
-			.csrf(AbstractHttpConfigurer::disable)
-			.formLogin(AbstractHttpConfigurer::disable)
-			.authorizeHttpRequests(t -> t
-				.requestMatchers("/**").permitAll()
-				// .requestMatchers("/admin/**").permitAll()
-				// .requestMatchers("/user/**").permitAll()
-				// .requestMatchers("/magazine/**").permitAll()
-				// .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-				// .requestMatchers("/login", "/register").permitAll() // "/login", "/register"
-
-				.anyRequest().authenticated());
+				.cors(AbstractHttpConfigurer::disable)
+				.csrf(AbstractHttpConfigurer::disable)
+				.formLogin(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(t -> t
+						.requestMatchers("/**").permitAll()
+						.anyRequest().authenticated())
+				.oauth2Login(oauth2 -> oauth2
+						.loginPage("/oauth2/authorization/google") // 권한 접근 실패 시 로그인 페이지로 이동
+						.defaultSuccessUrl("/loginSuccess") // 로그인 성공 시 이동할 페이지
+						.failureUrl("/loginFailure") // 로그인 실패 시 이동 페이지
+				)
+				.logout(logout -> logout
+						.logoutUrl("/logout") // 로그아웃 URL
+						.logoutSuccessUrl("/") // 로그아웃 성공 시 이동 페이지
+				);
 
 		return http.build(); // SecurityFilterChain 객체 반환
 	}

@@ -17,7 +17,7 @@ public interface UserMapper {
     UserDto selectUserByEmail(String email);
 
     @Insert("INSERT INTO Users (username, email, password_hash, profile_picture) VALUES (#{username}, #{email}, #{passwordHash}, #{profilePicture})")
-    void insertUser(UserDto user);
+    int insertUser(UserDto user);
 
     @Update("UPDATE Users SET username = #{username}, password_hash = #{passwordHash}, profile_picture = #{profilePicture} WHERE user_id = #{userId}")
     void updateUser(UserDto user);
@@ -39,4 +39,5 @@ public interface UserMapper {
 
     @Update("UPDATE Users SET token = NULL WHERE user_id = #{userId}")
     void deleteRefreshToken(int userId);
+
 }

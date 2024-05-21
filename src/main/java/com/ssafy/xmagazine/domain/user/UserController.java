@@ -98,6 +98,39 @@ public class UserController {
 		userService.deleteUser(id);
 	}
 
+	@PostMapping("/oauthLogin")
+	@Operation(summary = "OAuth 로그인", description = "OAuth 로그인을 처리합니다.")
+	public ResponseEntity<Map<String, Object>> oauthLogin(@RequestBody UserDto user) {
+		
+		log.info("OAuth 로그인 성공");
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.ACCEPTED;
+		try {
+			UserDto loginUser = userService.oauthLogin(user);
+			if (loginUser != null) {
+				String accessToken = jwtUtil.createAccessToken(loginUser.getUserId());
+				String refreshToken = jwtUtil.createRefreshToken(loginUser.getUserId());
+				log.debug("Access Token: {}", accessToken);
+				log.debug("Refresh Token: {}", refreshToken);
+
+				userService.saveRefreshToken(loginUser.getUserId(), refreshToken);
+
+				resultMap.put("access-token", accessToken);
+				resultMap.put("refresh-token", refreshToken);
+
+				status = HttpStatus.CREATED;
+			} else {
+				resultMap.put("message", "아이디 또는 패스워드를 확인해 주세요.");
+				status = HttpStatus.UNAUTHORIZED;
+			}
+		} catch (Exception e) {
+			log.debug("로그인 에러 발생: {}", e);
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<>(resultMap, status);
+	}
+
 	@PostMapping("/login")
 	@Operation(summary = "유저 로그인", description = "유저 로그인을 처리합니다.")
 	public ResponseEntity<Map<String, Object>> login(

@@ -24,4 +24,12 @@ public interface UserService {
 	public String getRefreshToken(int userId);
 
 	public void deleteRefreshToken(int userId);
+
+	public UserDto selectUserByEmail(String email);
+
+	public void addUser(UserDto userDto) throws Exception;
+
+	public boolean isEmailAvailable(String email);
+
+	public UserDto oauthLogin(UserDto userDto);
 }
