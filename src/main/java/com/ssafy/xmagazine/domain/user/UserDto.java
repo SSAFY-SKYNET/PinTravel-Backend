@@ -35,4 +35,9 @@ public class UserDto {
 
 	@Schema(name = "lastLogin", description = "마지막 로그인 날짜")
 	private LocalDateTime lastLogin;
+
+	public UserDto(String name, String email) {
+		this.username = name;
+		this.email = email;
+	}
 }
