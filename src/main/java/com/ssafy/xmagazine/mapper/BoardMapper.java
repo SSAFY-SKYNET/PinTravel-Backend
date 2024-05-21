@@ -14,16 +14,16 @@ import com.ssafy.xmagazine.domain.board.BoardDto;
 @Mapper
 public interface BoardMapper {
 
-	@Select("SELECT * FROM Boards WHERE user_id = #{userId} ORDER BY created_at DESC LIMIT #{limit} OFFSET #{offset}")
+	@Select("SELECT * FROM Boards WHERE user_id = #{userId} AND is_deleted = 0 ORDER BY created_at DESC LIMIT #{limit} OFFSET #{offset}")
 	List<BoardDto> selectBoardByUserId(@Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit);
 
-	@Select("SELECT * FROM Boards WHERE user_id = #{userId} ORDER BY created_at DESC")
+	@Select("SELECT * FROM Boards WHERE user_id = #{userId} AND is_deleted = 0 ORDER BY created_at DESC")
 	List<BoardDto> selectBoardListByUserId(@Param("userId") int userId);
 
-	@Select("SELECT board_id FROM Boards WHERE user_id = #{userId} ORDER BY board_id DESC LIMIT 1")
+	@Select("SELECT board_id FROM Boards WHERE user_id = #{userId} AND is_deleted = 0 ORDER BY board_id DESC LIMIT 1")
 	int selectBoardIdByUserId(int userId);
 
-	@Select("SELECT * FROM Boards WHERE board_id = #{boardId}")
+	@Select("SELECT * FROM Boards WHERE board_id = #{boardId} AND is_deleted = 0")
 	BoardDto selectBoardById(int boardId);
 
 	@Insert("INSERT INTO Boards (user_id, thumbnail, title, description, is_private) VALUES (#{userId}, #{thumbnail}, #{title}, #{description}, #{isPrivate})")
@@ -35,6 +35,6 @@ public interface BoardMapper {
 	@Update("UPDATE Boards SET thumbnail = #{thumbnail} WHERE board_id = #{boardId}")
 	void updateThumbnail(BoardDto boardDto);
 
-	@Delete("DELETE FROM Boards WHERE board_id = #{boardId}")
+	@Update("UPDATE Boards SET is_deleted = 1 WHERE board_id = #{boardId}")
 	void deleteBoard(int boardId);
 }
