@@ -6,8 +6,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +18,7 @@ import org.elasticsearch.common.xcontent.XContentType;
 
 import com.nimbusds.jose.shaded.gson.Gson;
 
-public class DataIndexer {
+public class SearchIndexing {
     public static void main(String[] args) {
         // Gson 객체 초기화
         Gson gson = new Gson();
