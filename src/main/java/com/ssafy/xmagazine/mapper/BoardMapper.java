@@ -17,6 +17,9 @@ public interface BoardMapper {
 	@Select("SELECT * FROM Boards WHERE user_id = #{userId} ORDER BY created_at DESC LIMIT #{limit} OFFSET #{offset}")
 	List<BoardDto> selectBoardByUserId(@Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit);
 
+	@Select("SELECT * FROM Boards WHERE user_id = #{userId} ORDER BY created_at DESC")
+	List<BoardDto> selectBoardListByUserId(@Param("userId") int userId);
+
 	@Select("SELECT board_id FROM Boards WHERE user_id = #{userId} ORDER BY board_id DESC LIMIT 1")
 	int selectBoardIdByUserId(int userId);
 
@@ -26,7 +29,7 @@ public interface BoardMapper {
 	@Insert("INSERT INTO Boards (user_id, thumbnail, title, description, is_private) VALUES (#{userId}, #{thumbnail}, #{title}, #{description}, #{isPrivate})")
 	void insertBoard(BoardDto boardDto);
 
-	@Update("UPDATE Boards SET thumbnail = #{thumbnail}, title = #{title}, description = #{description}, is_private = #{isPrivate} WHERE board_id = #{boardId}")
+	@Update("UPDATE Boards SET title = #{title}, description = #{description}, is_private = #{isPrivate} WHERE board_id = #{boardId}")
 	void updateBoard(BoardDto boardDto);
 
 	@Update("UPDATE Boards SET thumbnail = #{thumbnail} WHERE board_id = #{boardId}")

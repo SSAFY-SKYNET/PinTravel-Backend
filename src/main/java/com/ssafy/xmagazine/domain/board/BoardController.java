@@ -43,6 +43,25 @@ public class BoardController {
 		return ResponseEntity.status(HttpStatus.OK).body(boardService.selectBoardByUserId(userId, offset, limit));
 	}
 
+	@GetMapping("/list")
+	@Operation(summary = "사용자 ID로 Board List 조회", description = "사용자 ID로 Board List를 조회합니다.")
+	@ApiResponse(responseCode = "200", description = "OK")
+	@ApiResponse(responseCode = "404", description = "NOT FOUND")
+	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+	public ResponseEntity<List<BoardDto>> selectBoardListByUserId(
+		@RequestHeader("Authorization") String token) {
+		try {
+			// JWT에서 userId 추출
+			int userId = jwtUtil.getUserId(token);
+
+			return ResponseEntity.status(HttpStatus.CREATED).body(boardService.selectBoardListByUserId(userId));
+		} catch (UnAuthorizedException e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
 	@GetMapping("/{boardId}")
 	@Operation(summary = "ID로 Board 조회", description = "ID로 Board를 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "OK")
@@ -78,16 +97,42 @@ public class BoardController {
 	@Operation(summary = "Board 수정", description = "ID로 Board를 수정합니다.")
 	@ApiResponse(responseCode = "200", description = "OK")
 	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
+	@ApiResponse(responseCode = "403", description = "FORBIDDEN")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> updateBoard(@PathVariable int boardId, @RequestBody BoardDto boardDto) {
-		boardDto.setBoardId(boardId);
-		boardService.updateBoard(boardDto);
-		return ResponseEntity.status(HttpStatus.OK).build();
+	public ResponseEntity<BoardDto> updateBoard(@PathVariable int boardId, @RequestBody BoardDto boardDto,
+		@RequestHeader("Authorization") String token) {
+		try {
+			// JWT에서 userId 추출
+			int userId = jwtUtil.getUserId(token);
+
+			// 기존 Board 조회
+			BoardDto existingBoard = boardService.selectBoardById(boardId);
+			if (existingBoard == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			}
+
+			// 수정 권한 확인
+			if (existingBoard.getUserId() != userId) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+			}
+			System.out.println(boardId);
+			// Board 수정
+			boardDto.setBoardId(boardId);
+			boardService.updateBoard(boardDto);
+
+			// 수정된 Board 조회
+			BoardDto updatedBoard = boardService.selectBoardById(boardId);
+			return ResponseEntity.ok(updatedBoard);
+		} catch (UnAuthorizedException e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 
 	@PutMapping("/thumbnail/{boardId}")
-	@Operation(summary = "Board 수정", description = "ID로 Board를 수정합니다.")
+	@Operation(summary = "Board 수정", description = "ID로 Board Thumbnail를 수정합니다.")
 	@ApiResponse(responseCode = "200", description = "OK")
 	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
