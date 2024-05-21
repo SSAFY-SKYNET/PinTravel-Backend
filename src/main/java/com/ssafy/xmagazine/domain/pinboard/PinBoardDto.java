@@ -15,4 +15,7 @@ public class PinBoardDto {
 
 	@Schema(name = "boardId", description = "보드 ID")
 	private int boardId;
+
+	@Schema(name = "userId", description = "유저 ID")
+	private int userId;
 }

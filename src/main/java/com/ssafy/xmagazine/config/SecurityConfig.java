@@ -9,24 +9,34 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.ssafy.xmagazine.oauth.CustomAuthenticationSuccessHandler;
+import com.ssafy.xmagazine.oauth.CustomOAuth2UserService;
+
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+	private final CustomOAuth2UserService customOAuth2UserService;
+	private final CustomAuthenticationSuccessHandler successHandler;
+
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-			.cors(AbstractHttpConfigurer::disable)
-			.csrf(AbstractHttpConfigurer::disable)
-			.formLogin(AbstractHttpConfigurer::disable)
-			.authorizeHttpRequests(t -> t
-				.requestMatchers("/**").permitAll()
-				// .requestMatchers("/admin/**").permitAll()
-				// .requestMatchers("/user/**").permitAll()
-				// .requestMatchers("/magazine/**").permitAll()
-				// .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-				// .requestMatchers("/login", "/register").permitAll() // "/login", "/register"
-
-				.anyRequest().authenticated());
+				.cors(AbstractHttpConfigurer::disable)
+				.csrf(AbstractHttpConfigurer::disable)
+				.formLogin(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(t -> t
+						.requestMatchers("/**").permitAll()
+						.anyRequest().authenticated())
+				.oauth2Login(oauth2 -> oauth2
+						.successHandler(successHandler)
+						.loginPage("/oauth2/authorization/google") // 권한 접근 실패 시 로그인 페이지로 이동
+						.failureUrl("/loginFailure") // 로그인 실패 시 이동 페이지
+						.userInfoEndpoint(userInfo -> userInfo
+								.userService(customOAuth2UserService)));
 
 		return http.build(); // SecurityFilterChain 객체 반환
 	}
