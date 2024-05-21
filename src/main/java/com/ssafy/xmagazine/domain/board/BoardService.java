@@ -6,9 +6,11 @@ public interface BoardService {
 
 	List<BoardDto> selectBoardByUserId(int userId, int offset, int limit);
 
+	List<BoardDto> selectBoardListByUserId(int userId);
+
 	BoardDto selectBoardById(int boardId);
 
-	void insertBoard(BoardDto boardDto);
+	int insertBoard(BoardDto boardDto);
 
 	void updateBoard(BoardDto boardDto);
 
