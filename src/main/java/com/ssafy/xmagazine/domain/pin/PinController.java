@@ -191,7 +191,9 @@ public class PinController {
 		@RequestParam(defaultValue = "1") int page,
 		@RequestParam(defaultValue = "10") int limit) {
 		int offset = (page - 1) * limit;
-		List<PinDto> pins = pinService.searchPinsByMultiTagAndPage(tagNames, offset, limit);
+		// List<PinDto> pins = pinService.searchPinsByMultiTagAndPage(tagNames, offset, limit);
+		List<PinDto> pins = pinService.selectPinByMultiTagAndPage(tagNames, offset, limit);
+		
 		return ResponseEntity.status(HttpStatus.OK).body(pins);
 	}
 
