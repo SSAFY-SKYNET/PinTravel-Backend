@@ -1,5 +1,6 @@
 package com.ssafy.xmagazine;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.index.IndexRequest;
@@ -22,14 +24,23 @@ import org.elasticsearch.common.xcontent.XContentType;
 public class DistanceIndexing {
 
     public static void main(String[] args) {
-        String dbUrl = "jdbc:mysql://localhost:3306/pintravel";
-        String dbUser = "ssafy";
-        String dbPassword = "ssafy";
+        Properties props = new Properties();
+        try {
+            // 설정 파일 로드
+            props.load(new FileInputStream("/app/application.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        String dbUrl = props.getProperty("spring.datasource.url");
+        String dbUser = props.getProperty("spring.datasource.username");
+        String dbPassword = props.getProperty("spring.datasource.password");
         String indexName = "distance_index";
 
         try (RestHighLevelClient client = new RestHighLevelClient(
                 RestClient.builder(new HttpHost("localhost", 9200, "http")));
-             Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
+                Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
 
             if (!createIndex(client, indexName)) {
                 System.out.println("Index creation failed.");
@@ -60,7 +71,8 @@ public class DistanceIndexing {
                         "  \"properties\": {\n" +
                         "    \"userId\": {\"type\": \"integer\"},\n" +
                         "    \"title\": {\"type\": \"text\"},\n" +
-                        "    \"imageUrl\": {\"type\": \"text\", \"fields\": {\"keyword\": {\"type\": \"keyword\", \"ignore_above\": 256}}},\n" +
+                        "    \"imageUrl\": {\"type\": \"text\", \"fields\": {\"keyword\": {\"type\": \"keyword\", \"ignore_above\": 256}}},\n"
+                        +
                         "    \"description\": {\"type\": \"text\"},\n" +
                         "    \"address\": {\"type\": \"text\"},\n" +
                         "    \"location\": {\"type\": \"geo_point\"},\n" +
