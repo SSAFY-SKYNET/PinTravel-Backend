@@ -18,6 +18,20 @@ services:
       - "9300:9300"
     volumes:
       - esdata1:/usr/share/elasticsearch/data
+
+  app:
+    image: xmagazine:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+
 volumes:
   esdata1:
     driver: local
