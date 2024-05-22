@@ -1,5 +1,6 @@
 package com.ssafy.xmagazine;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.index.IndexRequest;
@@ -22,9 +24,21 @@ public class SearchIndexing {
     public static void main(String[] args) {
         // Gson 객체 초기화
         Gson gson = new Gson();
+        Properties props = new Properties();
+        try {
+            // 설정 파일 로드
+            props.load(new FileInputStream("/app/application.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
 
+        String dbUrl = props.getProperty("spring.datasource.url");
+        String dbUser = props.getProperty("spring.datasource.username");
+        String dbPassword = props.getProperty("spring.datasource.password");
+        String indexName = "distance_index";
         // 데이터베이스 연결 및 데이터 추출
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pintravel", "ssafy", "ssafy");
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
                 PreparedStatement pst = con.prepareStatement(
                         "SELECT p.*, GROUP_CONCAT(t.name SEPARATOR ', ') AS tags, COUNT(DISTINCT l.like_id) AS like_count "
                                 +

@@ -29,9 +29,26 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
+    volumes:
+      - ./src/main/resources/application.properties:/app/application.properties
     depends_on:
       - elasticsearch
+    # switch this command
+    command: >
+      sh -c "
+      java -jar app.jar
+      "
 
 volumes:
   esdata1:
     driver: local
+
+
+# switch this command
+# command: >
+#       sh -c "
+#       java -cp app.jar com.ssafy.xmagazine.DistanceIndexing &&
+#       java -cp app.jar com.ssafy.xmagazine.SearchIndexing &&
+#       java -jar app.jar
+#       "
+
