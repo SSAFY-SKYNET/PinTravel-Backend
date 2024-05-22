@@ -1,6 +1,5 @@
 package com.ssafy.xmagazine;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.index.IndexRequest;
@@ -20,26 +18,37 @@ import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.stereotype.Component;
 
-public class DistanceIndexing {
+import lombok.extern.slf4j.Slf4j;
+
+@Component
+@Slf4j
+public class DistanceIndexing implements CommandLineRunner {
+
+    @Value("${spring.datasource.url}")
+    private String dbUrl;
+
+    @Value("${spring.datasource.username}")
+    private String dbUser;
+
+    @Value("${spring.datasource.password}")
+    private String dbPassword;
 
     public static void main(String[] args) {
-        Properties props = new Properties();
-        try {
-            // 설정 파일 로드
-            props.load(new FileInputStream("/app/application.properties"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
+        log.debug("DistanceIndexing is running");
+        SpringApplication.run(DistanceIndexing.class, args);
+    }
 
-        String dbUrl = props.getProperty("spring.datasource.url");
-        String dbUser = props.getProperty("spring.datasource.username");
-        String dbPassword = props.getProperty("spring.datasource.password");
+    @Override
+    public void run(String... args) throws Exception {
         String indexName = "distance_index";
 
         try (RestHighLevelClient client = new RestHighLevelClient(
-                RestClient.builder(new HttpHost("localhost", 9200, "http")));
+                RestClient.builder(new HttpHost("34.207.79.51", 9200, "http")));
                 Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
 
             if (!createIndex(client, indexName)) {
@@ -61,7 +70,7 @@ public class DistanceIndexing {
         }
     }
 
-    private static boolean createIndex(RestHighLevelClient client, String indexName) throws IOException {
+    private boolean createIndex(RestHighLevelClient client, String indexName) throws IOException {
         CreateIndexRequest request = new CreateIndexRequest(indexName);
         request.settings(Settings.builder()
                 .put("index.number_of_shards", 1)
@@ -86,7 +95,7 @@ public class DistanceIndexing {
         return createIndexResponse.isAcknowledged();
     }
 
-    private static void indexData(RestHighLevelClient client, String indexName, ResultSet rs)
+    private void indexData(RestHighLevelClient client, String indexName, ResultSet rs)
             throws SQLException, IOException {
         while (rs.next()) {
             Map<String, Object> jsonMap = new HashMap<>();
@@ -97,6 +106,7 @@ public class DistanceIndexing {
             jsonMap.put("address", rs.getString("address"));
             jsonMap.put("location", Map.of("lat", rs.getDouble("latitude"), "lon", rs.getDouble("longitude")));
             jsonMap.put("createdAt", rs.getTimestamp("created_at").toInstant().toString());
+            jsonMap.put("isDeleted", rs.getBoolean("is_deleted"));
             jsonMap.put("isDeleted", rs.getBoolean("is_deleted"));
 
             IndexRequest indexRequest = new IndexRequest(indexName)

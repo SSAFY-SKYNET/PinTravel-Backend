@@ -7,49 +7,49 @@ import java.util.List;
 
 @Mapper
 public interface TagMapper {
-	@Insert("INSERT INTO Tags (name) VALUES (#{name})")
+	@Insert("insert into tags (name) values (#{name})")
 	@Options(useGeneratedKeys = true, keyProperty = "tagId")
 	void insertTag(TagDto tagDto);
 
-	@Update("UPDATE Tags SET name = #{name} WHERE tag_id = #{tagId}")
+	@Update("update tags set name = #{name} where tag_id = #{tagId}")
 	void updateTag(TagDto tagDto);
 
-	@Delete("DELETE FROM Tags WHERE tag_id = #{tagId}")
+	@Delete("delete from tags where tag_id = #{tagId}")
 	void deleteTag(int tagId);
 
-	@Select("SELECT * FROM Tags WHERE tag_id = #{tagId}")
+	@Select("select * from tags where tag_id = #{tagId}")
 	TagDto selectTagById(int tagId);
 
-	@Select("SELECT * FROM Tags")
+	@Select("select * from tags")
 	List<TagDto> selectAllTags();
 
 	@Select("<script>" +
-			"SELECT DISTINCT * FROM Tags " +
-			"WHERE " +
-			"<foreach item='item' collection='inputs' open='' separator=' OR ' close=''>" +
-			"name LIKE CONCAT('%', #{item}, '%')" +
+			"select distinct * from tags " +
+			"where " +
+			"<foreach item='item' collection='inputs' open='' separator=' or ' close=''>" +
+			"name like concat('%', #{item}, '%')" +
 			"</foreach>" +
-			" LIMIT #{pageSize} OFFSET #{offset}" +
+			" limit #{pageSize} offset #{offset}" +
 			"</script>")
 	List<TagDto> selectTagsByMultipleInputs(@Param("inputs") List<String> inputs, @Param("pageSize") int pageSize,
 			@Param("pageNum") int pageNum, @Param("offset") int offset);
 
-	@Select("SELECT * FROM Tags " +
-			"WHERE name LIKE CONCAT('%', #{input}, '%') " +
-			"ORDER BY CHAR_LENGTH(name), name " +
-			"LIMIT 5")
+	@Select("select * from tags " +
+			"where name like concat('%', #{input}, '%') " +
+			"order by char_length(name), name " +
+			"limit 5")
 	List<TagDto> selectTagsByInput(@Param("input") String input);
 
 	@Select("<script>" +
-        "SELECT * FROM Tags " +
-        "WHERE tag_id IN " +
-        "<foreach item='id' collection='tagIds' open='(' separator=',' close=')'>" +
-        "#{id}" +
-        "</foreach> " +
-        "ORDER BY FIELD(tag_id, " +
-        "<foreach item='id' collection='tagIds' separator=','>" +
-        "#{id}" +
-        "</foreach>)" +
-        "</script>")
+			"select * from tags " +
+			"where tag_id in " +
+			"<foreach item='id' collection='tagIds' open='(' separator=',' close=')'>" +
+			"#{id}" +
+			"</foreach> " +
+			"order by field(tag_id, " +
+			"<foreach item='id' collection='tagIds' separator=','>" +
+			"#{id}" +
+			"</foreach>)" +
+			"</script>")
 	List<TagDto> selectTagsByIds(@Param("tagIds") List<Integer> tagIds);
 }

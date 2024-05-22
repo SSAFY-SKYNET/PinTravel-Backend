@@ -61,7 +61,7 @@ public class PinController {
 	@Operation(summary = "좋아요 순으로 페이지 별 핀 목록 조회", description = "좋아요 순으로 페이지 별 핀 목록을 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "성공적으로 핀 목록을 조회했습니다.")
 	public ResponseEntity<List<PinDto>> getPinsByLikeCountAndPage(@RequestParam(defaultValue = "1") int page,
-		@RequestParam(defaultValue = "10") int limit) {
+			@RequestParam(defaultValue = "10") int limit) {
 		int offset = (page - 1) * limit;
 		return ResponseEntity.status(HttpStatus.OK).body(pinService.selectPinByLikeCountAndPage(offset, limit));
 	}
@@ -79,8 +79,8 @@ public class PinController {
 	@Operation(summary = "유저 ID로 페이지 별 핀 목록 조회", description = "유저 ID로 페이지 별 핀 목록을 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "성공적으로 핀 목록을 조회했습니다.")
 	public ResponseEntity<List<PinDto>> getPinsByUserIdAndPage(@PathVariable int userId,
-		@RequestParam(defaultValue = "1") int page,
-		@RequestParam(defaultValue = "10") int limit) {
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int limit) {
 		int offset = (page - 1) * limit;
 		return ResponseEntity.status(HttpStatus.OK).body(pinService.selectPinByUserIdAndPage(userId, offset, limit));
 	}
@@ -98,8 +98,8 @@ public class PinController {
 	@Operation(summary = "태그로 페이지 별 핀 목록 조회", description = "태그로 페이지 별 핀 목록을 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "성공적으로 핀 목록을 조회했습니다.")
 	public ResponseEntity<List<PinDto>> getPinsByTagAndPage(@PathVariable int tagId,
-		@RequestParam(defaultValue = "1") int page,
-		@RequestParam(defaultValue = "10") int limit) {
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int limit) {
 		int offset = (page - 1) * limit;
 		return ResponseEntity.status(HttpStatus.OK).body(pinService.selectPinByTagAndPage(tagId, offset, limit));
 	}
@@ -117,28 +117,11 @@ public class PinController {
 	@Operation(summary = "게시판 ID로 페이지 별 핀 목록 조회", description = "게시판 ID로 페이지 별 핀 목록을 조회합니다.")
 	@ApiResponse(responseCode = "200", description = "성공적으로 핀 목록을 조회했습니다.")
 	public ResponseEntity<List<PinDto>> getPinsByBoardAndPage(@PathVariable int boardId,
-		@RequestParam(defaultValue = "1") int page,
-		@RequestParam(defaultValue = "10") int limit) {
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int limit) {
 		int offset = (page - 1) * limit;
 		return ResponseEntity.status(HttpStatus.OK).body(pinService.selectPinByBoardAndPage(boardId, offset, limit));
 	}
-
-	// @GetMapping("/{pinId}/nearby/page")
-	// public ResponseEntity<List<PinDto>> getPinsByPinIdAndPage(@PathVariable int
-	// pinId,
-	// @RequestParam(defaultValue = "1") int page,
-	// @RequestParam(defaultValue = "10") int limit) {
-	// PinDto selectedPin = pinService.selectPinById(pinId);
-	// if (selectedPin == null) {
-	// return ResponseEntity.notFound().build();
-	// }
-	// double longitude = selectedPin.getLongitude();
-	// double latitude = selectedPin.getLatitude();
-	// int offset = (page - 1) * limit;
-	// List<PinDto> nearbyPins = pinService.selectPinByPinIdAndPage(longitude,
-	// latitude, offset, limit);
-	// return ResponseEntity.ok(nearbyPins);
-	// }
 
 	@PostMapping
 	@Operation(summary = "핀 등록", description = "새로운 핀을 등록합니다.")
@@ -188,15 +171,35 @@ public class PinController {
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
 	public ResponseEntity<List<PinDto>> getPinsByMultiTag(@RequestBody List<String> tagNames,
-		@RequestParam(defaultValue = "1") int page,
-		@RequestParam(defaultValue = "10") int limit) {
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int limit) {
 		int offset = (page - 1) * limit;
-		// List<PinDto> pins = pinService.searchPinsByMultiTagAndPage(tagNames, offset, limit);
+		// List<PinDto> pins = pinService.searchPinsByMultiTagAndPage(tagNames, offset,
+		// limit);
 		List<PinDto> pins = pinService.selectPinByMultiTagAndPage(tagNames, offset, limit);
-		
+
 		return ResponseEntity.status(HttpStatus.OK).body(pins);
 	}
 
+	// Mapper 쓰는 컨트롤러
+	// @GetMapping("/{pinId}/nearby/page")
+	// public ResponseEntity<List<PinDto>> getPinsByPinIdAndPage(@PathVariable int
+	// pinId,
+	// @RequestParam(defaultValue = "1") int page,
+	// @RequestParam(defaultValue = "10") int limit) {
+	// PinDto selectedPin = pinService.selectPinById(pinId);
+	// if (selectedPin == null) {
+	// return ResponseEntity.notFound().build();
+	// }
+	// double longitude = selectedPin.getLongitude();
+	// double latitude = selectedPin.getLatitude();
+	// int offset = (page - 1) * limit;
+	// List<PinDto> nearbyPins = pinService.selectPinByPinIdAndPage(longitude,
+	// latitude, offset, limit);
+	// return ResponseEntity.ok(nearbyPins);
+	// }
+
+	// Elasticsearch 쓰는 컨트롤러
 	@GetMapping("/{pinId}/nearby/page")
 	public ResponseEntity<List<PinDto>> getPinsByPinIdAndPage(@PathVariable int pinId,
 			@RequestParam(defaultValue = "1") int page,
@@ -208,7 +211,8 @@ public class PinController {
 		double longitude = selectedPin.getLongitude();
 		double latitude = selectedPin.getLatitude();
 		int offset = (page - 1) * limit;
-		List<PinDto> nearbyPins = pinService.selectPinByPinIdAndPage(longitude, latitude, offset, limit);
+		List<PinDto> nearbyPins = pinService.selectPinByPinIdAndPage(longitude,
+				latitude, offset, limit);
 		return ResponseEntity.ok(nearbyPins);
 	}
 }

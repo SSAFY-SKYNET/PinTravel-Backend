@@ -31,5 +31,4 @@ public interface PinService {
 
 	List<PinDto> selectPinByMultiTagAndPage(List<String> tagNames, int offset, int limit);
 
-	List<PinDto> searchPinsByMultiTagAndPage(List<String> tagNames, int offset, int limit);
 }
