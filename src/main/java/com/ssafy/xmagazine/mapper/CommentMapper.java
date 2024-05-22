@@ -12,23 +12,21 @@ import com.ssafy.xmagazine.domain.comment.CommentDto;
 
 @Mapper
 public interface CommentMapper {
-
-	@Select("SELECT * FROM comments WHERE pin_id = #{pinId} ORDER BY created_at ASC")
+	@Select("select * from comments where pin_id = #{pinId} order by created_at asc")
 	List<CommentDto> selectCommentByPinId(int pinId);
 
-	@Select("SELECT * FROM comments WHERE user_id = #{userId}")
+	@Select("select * from comments where user_id = #{userId}")
 	List<CommentDto> selectCommentByUserId(int userId);
 
-	@Select("SELECT * FROM comments WHERE comment_id = #{commentId}")
+	@Select("select * from comments where comment_id = #{commentId}")
 	CommentDto selectCommentById(int commentId);
 
-	@Insert("INSERT INTO comments (pin_id, user_id, text) VALUES (#{pinId}, #{userId}, #{text})")
+	@Insert("insert into comments (pin_id, user_id, text) values (#{pinId}, #{userId}, #{text})")
 	void insertComment(CommentDto commentDto);
 
-	@Update("UPDATE comments SET text = #{text} WHERE comment_id = #{comment_id}")
+	@Update("update comments set text = #{text} where comment_id = #{commentId}")
 	void updateComment(CommentDto commentDto);
 
-	@Delete("DELETE FROM comments WHERE comment_id = #{commentId}")
+	@Delete("delete from comments where comment_id = #{commentId}")
 	void deleteComment(int commentId);
-
 }

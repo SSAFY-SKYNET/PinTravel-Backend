@@ -34,19 +34,18 @@ services:
     depends_on:
       - elasticsearch
     # switch this command
+    # command: >
+    #   sh -c "
+    #   java -jar app.jar
+    #   "
+    # switch this command
     command: >
       sh -c "
+      java -cp app.jar com.ssafy.xmagazine.DistanceIndexing &&
+      java -cp app.jar com.ssafy.xmagazine.SearchIndexing &&
       java -jar app.jar
       "
 
 volumes:
   esdata1:
     driver: local
-# switch this command
-# command: >
-#       sh -c "
-#       java -cp app.jar com.ssafy.xmagazine.DistanceIndexing &&
-#       java -cp app.jar com.ssafy.xmagazine.SearchIndexing &&
-#       java -jar app.jar
-#       "
-
