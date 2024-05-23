@@ -21,10 +21,12 @@ import com.ssafy.xmagazine.util.JWTUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/pin")
 @Tag(name = "Pin", description = "Pin API")
+@Slf4j
 public class PinController {
 	private final PinService pinService;
 	private final JWTUtil jwtUtil;
@@ -174,6 +176,12 @@ public class PinController {
 			@RequestParam(defaultValue = "1") int page,
 			@RequestParam(defaultValue = "10") int limit) {
 		int offset = (page - 1) * limit;
+		log.debug("tagNames: {}", tagNames);
+		System.out.println("====================================================================");
+		System.out.println("====================================================================");
+		System.out.println("====================================================================");
+		System.out.println("====================================================================");
+		System.out.println("====================================================================");
 		// List<PinDto> pins = pinService.searchPinsByMultiTagAndPage(tagNames, offset,
 		// limit);
 		List<PinDto> pins = pinService.selectPinByMultiTagAndPage(tagNames, offset, limit);
@@ -183,36 +191,36 @@ public class PinController {
 
 	// Mapper 쓰는 컨트롤러
 	@GetMapping("/{pinId}/nearby/page")
-	public ResponseEntity<List<PinDto>> getPinsByPinIdAndPage(@PathVariable int
-	pinId,
-	@RequestParam(defaultValue = "1") int page,
-	@RequestParam(defaultValue = "10") int limit) {
-	PinDto selectedPin = pinService.selectPinById(pinId);
-	if (selectedPin == null) {
-	return ResponseEntity.notFound().build();
-	}
-	double longitude = selectedPin.getLongitude();
-	double latitude = selectedPin.getLatitude();
-	int offset = (page - 1) * limit;
-	List<PinDto> nearbyPins = pinService.selectPinByPinIdAndPage(longitude,
-	latitude, offset, limit);
-	return ResponseEntity.ok(nearbyPins);
+	public ResponseEntity<List<PinDto>> getPinsByPinIdAndPage(@PathVariable int pinId,
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int limit) {
+		PinDto selectedPin = pinService.selectPinById(pinId);
+		if (selectedPin == null) {
+			return ResponseEntity.notFound().build();
+		}
+		double longitude = selectedPin.getLongitude();
+		double latitude = selectedPin.getLatitude();
+		int offset = (page - 1) * limit;
+		List<PinDto> nearbyPins = pinService.selectPinByPinIdAndPage(longitude,
+				latitude, offset, limit);
+		return ResponseEntity.ok(nearbyPins);
 	}
 
 	// Elasticsearch 쓰는 컨트롤러
 	// @GetMapping("/{pinId}/nearby/page")
-	// public ResponseEntity<List<PinDto>> getPinsByPinIdAndPage(@PathVariable int pinId,
-	// 		@RequestParam(defaultValue = "1") int page,
-	// 		@RequestParam(defaultValue = "10") int limit) {
-	// 	PinDto selectedPin = pinService.selectPinById(pinId);
-	// 	if (selectedPin == null) {
-	// 		return ResponseEntity.notFound().build();
-	// 	}
-	// 	double longitude = selectedPin.getLongitude();
-	// 	double latitude = selectedPin.getLatitude();
-	// 	int offset = (page - 1) * limit;
-	// 	List<PinDto> nearbyPins = pinService.selectPinByPinIdAndPage(longitude,
-	// 			latitude, offset, limit);
-	// 	return ResponseEntity.ok(nearbyPins);
+	// public ResponseEntity<List<PinDto>> getPinsByPinIdAndPage(@PathVariable int
+	// pinId,
+	// @RequestParam(defaultValue = "1") int page,
+	// @RequestParam(defaultValue = "10") int limit) {
+	// PinDto selectedPin = pinService.selectPinById(pinId);
+	// if (selectedPin == null) {
+	// return ResponseEntity.notFound().build();
+	// }
+	// double longitude = selectedPin.getLongitude();
+	// double latitude = selectedPin.getLatitude();
+	// int offset = (page - 1) * limit;
+	// List<PinDto> nearbyPins = pinService.selectPinByPinIdAndPage(longitude,
+	// latitude, offset, limit);
+	// return ResponseEntity.ok(nearbyPins);
 	// }
 }

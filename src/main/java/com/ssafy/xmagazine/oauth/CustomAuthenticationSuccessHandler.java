@@ -19,14 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     private final JWTUtil jwtUtil;
     private final UserMapper userMapper;
-
-    @Value("${redirectUrl}")
-    private String redirectUrl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -40,7 +36,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         String refreshToken = jwtUtil.createRefreshToken(userId);
 
         // URL에 토큰을 포함하여 리디렉션
-
+        String redirectUrl = "http://pintravel.store/loginSuccess";
+        // String redirectUrl = "http://localhost:5173/loginSuccess";
         redirectUrl += "?accessToken=" + URLEncoder.encode(accessToken, "UTF-8");
         redirectUrl += "&refreshToken=" + URLEncoder.encode(refreshToken, "UTF-8");
 

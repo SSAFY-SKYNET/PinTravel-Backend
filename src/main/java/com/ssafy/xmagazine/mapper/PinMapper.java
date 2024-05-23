@@ -57,36 +57,35 @@ public interface PinMapper {
 	void deletePin(int pinId);
 
 	@Select("<script>" +
-        "SELECT p.*, COUNT(pt.tag_id) AS tag_count " +
-        "FROM pins p " +
-        "JOIN pintags pt ON p.pin_id = pt.pin_id " +
-        "JOIN tags t ON pt.tag_id = t.tag_id " +
-        "WHERE (" +
-        "    t.name IN " +
-        "    <foreach item='tagName' collection='tagNames' open='(' separator=',' close=')'>" +
-        "        #{tagName}" +
-        "    </foreach> " +
-        "    OR p.title REGEXP " +
-        "    <foreach item='tagName' collection='tagNames' open='(' separator='|' close=')'>" +
-        "        #{tagName}" +
-        "    </foreach> " +
-        "    OR p.address REGEXP " +
-        "    <foreach item='tagName' collection='tagNames' open='(' separator='|' close=')'>" +
-        "        #{tagName}" +
-        "    </foreach> " +
-        "    OR p.description REGEXP " +
-        "    <foreach item='tagName' collection='tagNames' open='(' separator='|' close=')'>" +
-        "        #{tagName}" +
-        "    </foreach> " +
-        ") " +
-        "AND p.is_deleted = false " +
-        "GROUP BY p.pin_id " +
-        "ORDER BY tag_count DESC, p.pin_id DESC " +
-        "LIMIT #{limit} OFFSET #{offset}" +
-        "</script>")
-List<PinDto> selectPinByMultiTagAndPage(@Param("tagNames") List<String> tagNames,
-                                        @Param("offset") int offset,
-                                        @Param("limit") int limit);
-
+			"SELECT p.*, COUNT(pt.tag_id) AS tag_count " +
+			"FROM pins p " +
+			"JOIN pintags pt ON p.pin_id = pt.pin_id " +
+			"JOIN tags t ON pt.tag_id = t.tag_id " +
+			"WHERE (" +
+			"    t.name IN " +
+			"    <foreach item='tagName' collection='tagNames' open='(' separator=',' close=')'>" +
+			"        #{tagName}" +
+			"    </foreach> " +
+			"    OR p.title REGEXP " +
+			"    <foreach item='tagName' collection='tagNames' open='(' separator='|' close=')'>" +
+			"        #{tagName}" +
+			"    </foreach> " +
+			"    OR p.address REGEXP " +
+			"    <foreach item='tagName' collection='tagNames' open='(' separator='|' close=')'>" +
+			"        #{tagName}" +
+			"    </foreach> " +
+			"    OR p.description REGEXP " +
+			"    <foreach item='tagName' collection='tagNames' open='(' separator='|' close=')'>" +
+			"        #{tagName}" +
+			"    </foreach> " +
+			") " +
+			"AND p.is_deleted = false " +
+			"GROUP BY p.pin_id " +
+			"ORDER BY tag_count DESC, p.pin_id DESC " +
+			"LIMIT #{limit} OFFSET #{offset}" +
+			"</script>")
+	List<PinDto> selectPinByMultiTagAndPage(@Param("tagNames") List<String> tagNames,
+			@Param("offset") int offset,
+			@Param("limit") int limit);
 
 }

@@ -108,17 +108,28 @@ public class PinServiceImpl implements PinService {
 
 	// Mapper를 활용한 검색
 	@Override
-	public List<PinDto> selectPinByMultiTagAndPage(List<String> tagNames, int
-	offset, int limit) {
-	return pinMapper.selectPinByMultiTagAndPage(tagNames, offset, limit);
+	public List<PinDto> selectPinByMultiTagAndPage(List<String> tagNames, int offset, int limit) {
+		log.debug("==========================================");
+		log.debug("==========================================");
+		log.debug("==========================================");
+		log.debug("==========================================");
+		log.debug("selectPinByMultiTagAndPage is running");
+		log.debug("tagNames: {}", tagNames);
+		log.debug("offset: {}", offset);
+		log.debug("limit: {}", limit);
+		List<PinDto> pinList = pinMapper.selectPinByMultiTagAndPage(tagNames, offset, limit);
+		log.debug("pinList: {}", pinList);
+		return pinList;
 	}
 
 	// Elasticsearch 를 활용한 검색
 	// @Override
-	// public List<PinDto> selectPinByMultiTagAndPage(List<String> tagNames, int offset, int limit) {
-	// 	log.debug("selectPinByMultiTagAndPage is running");
-	// 	SearchRequest searchRequest = buildSearchRequest("search_index", tagNames, offset, limit);
-	// 	return executeSearch(searchRequest);
+	// public List<PinDto> selectPinByMultiTagAndPage(List<String> tagNames, int
+	// offset, int limit) {
+	// log.debug("selectPinByMultiTagAndPage is running");
+	// SearchRequest searchRequest = buildSearchRequest("search_index", tagNames,
+	// offset, limit);
+	// return executeSearch(searchRequest);
 	// }
 
 	private SearchRequest buildSearchRequest(String indexName, List<String> keywords, int offset, int limit) {
