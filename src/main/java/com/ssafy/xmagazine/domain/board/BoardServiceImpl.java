@@ -47,8 +47,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void updateThumbnail(BoardDto boardDto) {
-		boardMapper.updateThumbnail(boardDto);
+	public void updateThumbnail(int boardId) {
+		boardMapper.updateThumbnail(boardId);
 	}
 
 	@Override

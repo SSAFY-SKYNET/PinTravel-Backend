@@ -33,8 +33,8 @@ public interface BoardMapper {
 	@Update("update boards set title = #{title}, description = #{description}, is_private = #{isPrivate} where board_id = #{boardId}")
 	void updateBoard(BoardDto boardDto);
 
-	@Update("update boards set thumbnail = #{thumbnail} where board_id = #{boardId}")
-	void updateThumbnail(BoardDto boardDto);
+	@Update("UPDATE boards SET thumbnail = (SELECT image_url FROM pins WHERE pin_id = (SELECT pin_id FROM pinboards WHERE board_id = #{boardId} ORDER BY created_at DESC LIMIT 1)) WHERE board_id = #{boardId}")
+	void updateThumbnail(int boardId);
 
 	@Update("update boards set is_deleted = 1 where board_id = #{boardId}")
 	void deleteBoard(int boardId);

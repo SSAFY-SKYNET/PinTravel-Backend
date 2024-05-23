@@ -137,9 +137,8 @@ public class BoardController {
 	@ApiResponse(responseCode = "400", description = "BAD REQUEST")
 	@ApiResponse(responseCode = "404", description = "NOT FOUND")
 	@ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-	public ResponseEntity<Void> updateThumbnail(@PathVariable int boardId, @RequestBody BoardDto boardDto) {
-		boardDto.setBoardId(boardId);
-		boardService.updateThumbnail(boardDto);
+	public ResponseEntity<Void> updateThumbnail(@PathVariable int boardId) {
+		boardService.updateThumbnail(boardId);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 

@@ -14,7 +14,7 @@ public interface BoardService {
 
 	void updateBoard(BoardDto boardDto);
 
-	void updateThumbnail(BoardDto boardDto);
+	void updateThumbnail(int boardId);
 
 	void deleteBoard(int boardId);
 }
