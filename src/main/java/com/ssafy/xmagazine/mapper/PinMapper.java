@@ -61,25 +61,21 @@ public interface PinMapper {
 			"FROM pins p " +
 			"JOIN pintags pt ON p.pin_id = pt.pin_id " +
 			"JOIN tags t ON pt.tag_id = t.tag_id " +
-			"WHERE (" +
+			"WHERE p.is_deleted = false " +
+			"AND (" +
 			"    t.name IN " +
 			"    <foreach item='tagName' collection='tagNames' open='(' separator=',' close=')'>" +
 			"        #{tagName}" +
 			"    </foreach> " +
-			"    OR p.title REGEXP " +
-			"    <foreach item='tagName' collection='tagNames' open='(' separator='|' close=')'>" +
-			"        #{tagName}" +
+			"    OR p.title LIKE " +
+			"    <foreach item='tagName' collection='tagNames' separator=' OR '>" +
+			"        CONCAT('%', #{tagName}, '%')" +
 			"    </foreach> " +
-			"    OR p.address REGEXP " +
-			"    <foreach item='tagName' collection='tagNames' open='(' separator='|' close=')'>" +
-			"        #{tagName}" +
-			"    </foreach> " +
-			"    OR p.description REGEXP " +
-			"    <foreach item='tagName' collection='tagNames' open='(' separator='|' close=')'>" +
-			"        #{tagName}" +
+			"    OR p.address LIKE " +
+			"    <foreach item='tagName' collection='tagNames' separator=' OR '>" +
+			"        CONCAT('%', #{tagName}, '%')" +
 			"    </foreach> " +
 			") " +
-			"AND p.is_deleted = false " +
 			"GROUP BY p.pin_id " +
 			"ORDER BY tag_count DESC, p.pin_id DESC " +
 			"LIMIT #{limit} OFFSET #{offset}" +
