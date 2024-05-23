@@ -27,7 +27,7 @@ import com.nimbusds.jose.shaded.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component
+// @Component
 @Slf4j
 public class ElasticIndexing implements CommandLineRunner {
 
@@ -52,7 +52,7 @@ public class ElasticIndexing implements CommandLineRunner {
         SpringApplication.run(ElasticIndexing.class, args);
     }
 
-    @Override
+    // @Override
     public void run(String... args) throws Exception {
         Gson gson = new Gson();
         String indexName = "distance_index";
