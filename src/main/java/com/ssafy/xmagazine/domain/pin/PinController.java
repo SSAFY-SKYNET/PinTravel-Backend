@@ -182,37 +182,37 @@ public class PinController {
 	}
 
 	// Mapper 쓰는 컨트롤러
-	// @GetMapping("/{pinId}/nearby/page")
-	// public ResponseEntity<List<PinDto>> getPinsByPinIdAndPage(@PathVariable int
-	// pinId,
-	// @RequestParam(defaultValue = "1") int page,
-	// @RequestParam(defaultValue = "10") int limit) {
-	// PinDto selectedPin = pinService.selectPinById(pinId);
-	// if (selectedPin == null) {
-	// return ResponseEntity.notFound().build();
-	// }
-	// double longitude = selectedPin.getLongitude();
-	// double latitude = selectedPin.getLatitude();
-	// int offset = (page - 1) * limit;
-	// List<PinDto> nearbyPins = pinService.selectPinByPinIdAndPage(longitude,
-	// latitude, offset, limit);
-	// return ResponseEntity.ok(nearbyPins);
-	// }
+	@GetMapping("/{pinId}/nearby/page")
+	public ResponseEntity<List<PinDto>> getPinsByPinIdAndPage(@PathVariable int
+	pinId,
+	@RequestParam(defaultValue = "1") int page,
+	@RequestParam(defaultValue = "10") int limit) {
+	PinDto selectedPin = pinService.selectPinById(pinId);
+	if (selectedPin == null) {
+	return ResponseEntity.notFound().build();
+	}
+	double longitude = selectedPin.getLongitude();
+	double latitude = selectedPin.getLatitude();
+	int offset = (page - 1) * limit;
+	List<PinDto> nearbyPins = pinService.selectPinByPinIdAndPage(longitude,
+	latitude, offset, limit);
+	return ResponseEntity.ok(nearbyPins);
+	}
 
 	// Elasticsearch 쓰는 컨트롤러
-	@GetMapping("/{pinId}/nearby/page")
-	public ResponseEntity<List<PinDto>> getPinsByPinIdAndPage(@PathVariable int pinId,
-			@RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "10") int limit) {
-		PinDto selectedPin = pinService.selectPinById(pinId);
-		if (selectedPin == null) {
-			return ResponseEntity.notFound().build();
-		}
-		double longitude = selectedPin.getLongitude();
-		double latitude = selectedPin.getLatitude();
-		int offset = (page - 1) * limit;
-		List<PinDto> nearbyPins = pinService.selectPinByPinIdAndPage(longitude,
-				latitude, offset, limit);
-		return ResponseEntity.ok(nearbyPins);
-	}
+	// @GetMapping("/{pinId}/nearby/page")
+	// public ResponseEntity<List<PinDto>> getPinsByPinIdAndPage(@PathVariable int pinId,
+	// 		@RequestParam(defaultValue = "1") int page,
+	// 		@RequestParam(defaultValue = "10") int limit) {
+	// 	PinDto selectedPin = pinService.selectPinById(pinId);
+	// 	if (selectedPin == null) {
+	// 		return ResponseEntity.notFound().build();
+	// 	}
+	// 	double longitude = selectedPin.getLongitude();
+	// 	double latitude = selectedPin.getLatitude();
+	// 	int offset = (page - 1) * limit;
+	// 	List<PinDto> nearbyPins = pinService.selectPinByPinIdAndPage(longitude,
+	// 			latitude, offset, limit);
+	// 	return ResponseEntity.ok(nearbyPins);
+	// }
 }

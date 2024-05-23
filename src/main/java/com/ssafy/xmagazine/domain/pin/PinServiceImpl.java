@@ -107,19 +107,19 @@ public class PinServiceImpl implements PinService {
 	}
 
 	// Mapper를 활용한 검색
-	// @Override
-	// public List<PinDto> selectPinByMultiTagAndPage(List<String> tagNames, int
-	// offset, int limit) {
-	// return pinMapper.selectPinByMultiTagAndPage(tagNames, offset, limit);
-	// }
+	@Override
+	public List<PinDto> selectPinByMultiTagAndPage(List<String> tagNames, int
+	offset, int limit) {
+	return pinMapper.selectPinByMultiTagAndPage(tagNames, offset, limit);
+	}
 
 	// Elasticsearch 를 활용한 검색
-	@Override
-	public List<PinDto> selectPinByMultiTagAndPage(List<String> tagNames, int offset, int limit) {
-		log.debug("selectPinByMultiTagAndPage is running");
-		SearchRequest searchRequest = buildSearchRequest("search_index", tagNames, offset, limit);
-		return executeSearch(searchRequest);
-	}
+	// @Override
+	// public List<PinDto> selectPinByMultiTagAndPage(List<String> tagNames, int offset, int limit) {
+	// 	log.debug("selectPinByMultiTagAndPage is running");
+	// 	SearchRequest searchRequest = buildSearchRequest("search_index", tagNames, offset, limit);
+	// 	return executeSearch(searchRequest);
+	// }
 
 	private SearchRequest buildSearchRequest(String indexName, List<String> keywords, int offset, int limit) {
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();

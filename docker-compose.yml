@@ -41,8 +41,6 @@ services:
     # switch this command
     command: >
       sh -c "
-      java -cp app.jar com.ssafy.xmagazine.DistanceIndexing &&
-      java -cp app.jar com.ssafy.xmagazine.SearchIndexing &&
       java -jar app.jar
       "
 

@@ -39,10 +39,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         // URL에 토큰을 포함하여 리디렉션
 
         // 로컬 연결
-        String redirectUrl = "http://localhost:5173/loginSuccess";
+        // String redirectUrl = "http://localhost:5173/loginSuccess";
 
         // 배포 연결
-        // String redirectUrl = "http://pintravel.store/loginSuccess";
+        String redirectUrl = "http://pintravel.store/loginSuccess";
 
         redirectUrl += "?accessToken=" + URLEncoder.encode(accessToken, "UTF-8");
         redirectUrl += "&refreshToken=" + URLEncoder.encode(refreshToken, "UTF-8");
