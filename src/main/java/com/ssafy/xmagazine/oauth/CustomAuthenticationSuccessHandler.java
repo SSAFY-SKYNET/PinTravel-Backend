@@ -3,6 +3,7 @@ package com.ssafy.xmagazine.oauth;
 import java.io.IOException;
 import java.net.URLEncoder;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.ssafy.xmagazine.mapper.UserMapper;
 import com.ssafy.xmagazine.util.JWTUtil;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +25,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     private final JWTUtil jwtUtil;
     private final UserMapper userMapper;
 
+    @Value("${redirectUrl}")
+    private String redirectUrl;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException {
@@ -37,12 +40,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         String refreshToken = jwtUtil.createRefreshToken(userId);
 
         // URL에 토큰을 포함하여 리디렉션
-
-        // 로컬 연결
-        // String redirectUrl = "http://localhost:5173/loginSuccess";
-
-        // 배포 연결
-        String redirectUrl = "http://pintravel.store/loginSuccess";
 
         redirectUrl += "?accessToken=" + URLEncoder.encode(accessToken, "UTF-8");
         redirectUrl += "&refreshToken=" + URLEncoder.encode(refreshToken, "UTF-8");
