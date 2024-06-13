@@ -38,7 +38,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         log.info("Access Token: {}", accessToken);
         log.info("Refresh Token: {}", refreshToken);
 
-        String redirectUrl = "http://pintravel.store/loginSuccess";
+        // String redirectUrl = "http://pintravel.store/loginSuccess";
+        String redirectUrl = "http://localhost:5173/loginSuccess";
         redirectUrl += "?accessToken=" + URLEncoder.encode(accessToken, "UTF-8");
         redirectUrl += "&refreshToken=" + URLEncoder.encode(refreshToken, "UTF-8");
         response.sendRedirect(redirectUrl);

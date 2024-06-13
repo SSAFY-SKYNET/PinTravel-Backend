@@ -28,9 +28,10 @@ public class SecurityConfig {
 		http
 				.cors(AbstractHttpConfigurer::disable)
 				.csrf(AbstractHttpConfigurer::disable)
+
 				.formLogin(AbstractHttpConfigurer::disable)
-				.authorizeHttpRequests(t -> t
-						.requestMatchers("/**").permitAll()
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers("/hc", "/env").permitAll()
 						.anyRequest().authenticated())
 				.oauth2Login(oauth2 -> oauth2
 						.successHandler(successHandler)

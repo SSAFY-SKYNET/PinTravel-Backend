@@ -7,8 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.xmagazine.mapper.CommentMapper;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
 @Transactional
 public class CommentServiceImpl implements CommentService {

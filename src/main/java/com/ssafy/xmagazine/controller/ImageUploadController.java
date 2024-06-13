@@ -11,19 +11,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
-import com.amazonaws.services.s3.AmazonS3;
 import com.ssafy.xmagazine.Service.ImageUploadService;
-import com.ssafy.xmagazine.config.S3Config;
 
 @Controller
 public class ImageUploadController {
-    private final AmazonS3 amazonS3;
-    private final S3Config s3Config;
+
     private final ImageUploadService imageUploadService;
 
-    public ImageUploadController(AmazonS3 amazonS3, S3Config s3Config, ImageUploadService imageUploadService) {
-        this.amazonS3 = amazonS3;
-        this.s3Config = s3Config;
+    public ImageUploadController(ImageUploadService imageUploadService) {
         this.imageUploadService = imageUploadService;
     }
 

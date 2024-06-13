@@ -62,6 +62,5 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             userMapper.updateUser(user);
             return userMapper.selectUserByEmail(user.getEmail());
         }
-
     }
 }

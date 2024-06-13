@@ -56,13 +56,6 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(userService.selectUserById(id));
 	}
 
-	// @PostMapping("/login")
-	// @Operation(summary = "유저 로그인", description = "유저 로그인을 처리합니다.")
-	// public void login(@RequestBody UserDto user) {
-	//     log.info("UserDto: {}", user);
-	//     userService.login(user);
-	// }
-
 	@PostMapping("/logout")
 	@Operation(summary = "유저 로그아웃", description = "유저 로그아웃을 처리합니다.")
 	public void logout(@RequestBody UserDto user) {
@@ -101,7 +94,7 @@ public class UserController {
 	@PostMapping("/oauthLogin")
 	@Operation(summary = "OAuth 로그인", description = "OAuth 로그인을 처리합니다.")
 	public ResponseEntity<Map<String, Object>> oauthLogin(@RequestBody UserDto user) {
-		
+
 		log.info("OAuth 로그인 성공");
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.ACCEPTED;
@@ -134,7 +127,7 @@ public class UserController {
 	@PostMapping("/login")
 	@Operation(summary = "유저 로그인", description = "유저 로그인을 처리합니다.")
 	public ResponseEntity<Map<String, Object>> login(
-		@RequestBody @Parameter(description = "로그인 시 필요한 회원정보(아이디, 비밀번호).", required = true) UserDto userDto) {
+			@RequestBody @Parameter(description = "로그인 시 필요한 회원정보(아이디, 비밀번호).", required = true) UserDto userDto) {
 		log.debug("Login User: {}", userDto);
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.ACCEPTED;
@@ -195,7 +188,7 @@ public class UserController {
 	@PostMapping("/refresh")
 	@Operation(summary = "토큰 재발급", description = "Refresh Token을 이용하여 Access Token을 재발급합니다.")
 	public ResponseEntity<Map<String, Object>> tokenRegeneration(@RequestBody UserDto userDto,
-		HttpServletRequest request) {
+			HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.ACCEPTED;
 		String token = request.getHeader("refreshToken");
@@ -218,7 +211,7 @@ public class UserController {
 	@GetMapping("/logout/{userId}")
 	@Operation(summary = "유저 로그아웃", description = "유저 로그아웃을 처리합니다.")
 	public ResponseEntity<Map<String, Object>> logout(
-		@PathVariable("userId") @Parameter(description = "로그아웃 할 회원의 아이디.", required = true) int userId) {
+			@PathVariable("userId") @Parameter(description = "로그아웃 할 회원의 아이디.", required = true) int userId) {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.ACCEPTED;
 		try {

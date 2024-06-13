@@ -7,8 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.xmagazine.mapper.BoardMapper;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
 @Transactional
 public class BoardServiceImpl implements BoardService {
