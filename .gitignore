@@ -1,11 +1,11 @@
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
+
 !**/src/main/**/target/
 !**/src/test/**/target/
-application-aws.properties
-application-oauth.properties
-application-openai.properties
+
+src/main/resources/application.yml
+src/main/resources/application-secret.yml
 ### STS ###
 .apt_generated
 .classpath
