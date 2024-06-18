@@ -20,6 +20,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Create application-secret.yml
+        run: |
+          pwd
+          touch src/main/resources/application-secret.yml
+          echo "${{ secrets.APPLICATION_SECRET_YML }}" >> src/main/resources/profiles/application-secret.yml
+          cat src/main/resources/profiles/application-secret.yml
+          
       - name: Build with Maven
         run: |
           chmod 777 ./mvnw
